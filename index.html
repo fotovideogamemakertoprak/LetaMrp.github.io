@@ -58,6 +58,8 @@ canvas#c{display:block}
     <input id="authUsr" maxlength="14" placeholder="Kullanıcı adınızı girin">
     <label>Şifre</label>
     <input id="authPwd" type="password" maxlength="20" placeholder="Şifrenizi girin">
+    <label>Sunucu adresi (isteğe bağlı, boş bırak = sunucusuz)</label>
+    <input id="authSrv" placeholder="wss://xxxx.onrender.com">
     <button id="authBtn">Giriş Yap / Kaydol</button>
     <div id="authMsg"></div>
   </div>
@@ -75,7 +77,9 @@ canvas#c{display:block}
 <div id="xh"></div><div id="fl"></div><div id="npcHud">NPC: <span id="npcCount">0</span> · Etkisiz: <span id="killCount">0</span></div><div id="rpHud">Para: <b id="moneyHud">$25.000</b><br><span id="jobHud">Meslek: Yok</span><br><span id="invHud">Envanter: Boş</span></div><div id="rpPanel"><button class="rpClose" id="rpClose">Kapat (Esc)</button><h2 id="rpTitle">LOS BURSA</h2><div id="rpBody"></div><div id="rpMsg"></div></div><div id="garage"><button id="garageClose">Kapat (B)</button><h2>LOS BURSA · ARAÇ GALERİSİ</h2><div class="sub">Bütçe: <b id="cash">$25.000</b> · Bir araç seç ve satın al.</div><div id="carsGrid"></div><div id="garageMsg"></div></div>
 <div class="hud" id="top"><span id="clk">12:00</span><br><span id="on" style="font-size:20px">Çevrimiçi: 1</span></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
+let WS_URL=(()=>{try{return new URLSearchParams(location.search).get('server')||localStorage.getItem('losBursaServer')||''}catch(e){return ''}})()||(['localhost','127.0.0.1',''].includes(location.hostname)?'ws://localhost:8080':'');
 let currentUser = null;
 let cash = 25000, ownedCars = [0];
 let savedData = { cash: 25000, inventory: { sigara: 0, telefon: 1, kacakPaket: 0 }, ownedCars: [0], sel: [1,1,1,0,2,0,3,1,0,0,2,1,5] };
@@ -96,6 +100,8 @@ function doLogin() {
     try { localStorage.setItem('losBursaUsers', JSON.stringify(users)); } catch(e) {}
   }
   currentUser = u;
+  const sv = document.getElementById('authSrv').value.trim();
+  if(sv) { let u2 = sv.replace(/^https:/,'wss:').replace(/^http:/,'ws:'); if(!/^wss?:/.test(u2)) u2 = 'wss://' + u2; try { localStorage.setItem('losBursaServer', u2); } catch(e) {} WS_URL = u2; if(!usingWS&&wsLive){ location.reload(); return; } connectMP(); }
   document.getElementById('authBox').style.display = 'none';
   document.getElementById('menu').style.display = 'block';
   const sd = savedData.sel || [];
@@ -314,10 +320,52 @@ function applyPeers(list){list.forEach(p=>{if(p.isMe)return;const d=p.presence,s
   else if(x.k=='hit'){if(started&&x.t===RID)damage(Math.min(60,nn(x.d)),String(x.n||'?').slice(0,14))}}})}
 function dropPeer(p){const e=peersM[p.peer];if(!e)return;S.remove(e.g,e.cr);if(e.lab)S.remove(e.lab);delete peersM[p.peer]}
 function damage(d,by){hp-=d;flash=.35;if(hp<=0){const m=by+', '+pname+' oyuncusunu vurdu';show('sys','',m);pushEv({k:'chat',t:'sys',n:by,m});hp=100;inCar=false;ch.visible=true;ch.position.set(rnd(4,16),0,rnd(4,16));v=0;hud()}}
-if(window.claude&&claude.use)claude.use('room').then(r=>{if(!r)return;room=r;applyPeers(r.peers());r.onPeers(c=>{c.left.forEach(dropPeer);applyPeers(c.peers)});
- r.on('chat',m=>{if(m.sameTab)return;const d=m.data||{},t=['me','do','say','sys'].includes(d.t)?d.t:'say',e=peersM[m.peer];show(t,String(d.n||'?').slice(0,14),String(d.m||'').slice(0,120),e?e.g:null)});
- r.on('shot',m=>{if(m.sameTab)return;const d=m.data;if(d&&Array.isArray(d.a)&&Array.isArray(d.b)&&d.a.length==3&&d.b.length==3)tracer(d.a.map(nn),d.b.map(nn))});
- r.on('hit',m=>{const d=m.data||{};if(started&&d.t===RID)damage(Math.min(60,nn(d.d)),String(d.n||'?').slice(0,14))})}).catch(()=>{});
+let wsTry=0,myId=null,wsLive=false,usingWS=false;
+function connectWS(){
+ if(wsLive||!WS_URL||WS_URL.includes('BURAYA'))return;wsLive=true;usingWS=true;
+ let ws;try{ws=new WebSocket(WS_URL)}catch(e){return}
+ const shim={presence(p){if(ws.readyState===1)ws.send(JSON.stringify({t:'p',d:p}));return Promise.resolve()}};
+ ws.onopen=()=>{room=shim;wsTry=0};
+ ws.onmessage=ev=>{let m;try{m=JSON.parse(ev.data)}catch(e){return}
+  if(m.t==='hello'){myId=m.id;applyPeers((m.peers||[]).map(x=>({peer:x.peer,isMe:false,presence:x.presence})))}
+  else if(m.t==='u'){applyPeers((m.list||[]).filter(x=>x.peer!==myId).map(x=>({peer:x.peer,isMe:false,presence:x.presence})))}
+  else if(m.t==='l'){dropPeer({peer:m.peer})}};
+ ws.onclose=()=>{wsLive=false;room=null;for(const id in peersM)dropPeer({peer:id});setTimeout(connectMP,Math.min(10000,2000*(++wsTry)))};
+ ws.onerror=()=>{try{ws.close()}catch(e){}};
+}
+const P2P_ID='losbursa-letamrp-'+((new URLSearchParams(location.search).get('oda')||'ana').replace(/[^a-z0-9]/gi,'').toLowerCase().slice(0,20)||'ana'),P2P_KEYS=['o','id','w','n','x','z','r','ic','cx','cz','cr','ct','cc','hp','ev'];
+function connectMP(){if(wsLive)return;if(WS_URL&&!WS_URL.includes('BURAYA'))connectWS();else connectP2P()}
+function connectP2P(){
+ if(wsLive||typeof Peer==='undefined')return;wsLive=true;
+ let over=false,timer=null;
+ const again=pr=>{if(over)return;over=true;clearInterval(timer);try{pr&&pr.destroy()}catch(e){}room=null;for(const id in peersM)dropPeer({peer:id});wsLive=false;setTimeout(connectMP,600+Math.random()*2200)};
+ const hp0=new Peer(P2P_ID);let settled=false;
+ hp0.on('open',()=>{settled=true;host(hp0)});
+ hp0.on('disconnected',()=>{if(settled&&!over){try{hp0.reconnect()}catch(e){}}});
+ hp0.on('error',err=>{if(settled)return;settled=true;try{hp0.destroy()}catch(e){}if(err.type==='unavailable-id')client();else again(null)});
+ function host(pr){const me='host',pres=new Map([[me,{}]]),cl=new Map(),dirty=new Set();
+  room={presence(p){const c=pres.get(me);for(const k of Object.keys(p))if(P2P_KEYS.includes(k))c[k]=p[k];dirty.add(me);return Promise.resolve()}};
+  pr.on('connection',conn=>{const id=conn.peer;
+   conn.on('open',()=>{if(cl.size>=12){conn.close();return}cl.set(id,conn);pres.set(id,{});conn.send({t:'hello',id,peers:[...pres].filter(([k])=>k!==id).map(([k,v])=>({peer:k,presence:v}))})});
+   conn.on('data',m=>{const c=pres.get(id);if(!c||!m||m.t!=='p'||!m.d||typeof m.d!=='object')return;for(const k of Object.keys(m.d))if(P2P_KEYS.includes(k)&&JSON.stringify(m.d[k]).length<=1500)c[k]=m.d[k];dirty.add(id)});
+   const gone=()=>{if(!cl.delete(id))return;pres.delete(id);dirty.delete(id);dropPeer({peer:id});for(const o of cl.values())if(o.open)o.send({t:'l',peer:id})};
+   conn.on('close',gone);conn.on('error',gone)});
+  timer=setInterval(()=>{if(!dirty.size)return;const list=[...dirty].filter(k=>pres.has(k)).map(k=>({peer:k,presence:pres.get(k)}));dirty.clear();
+   for(const o of cl.values())if(o.open)o.send({t:'u',list});
+   applyPeers(list.filter(x=>x.peer!==me).map(x=>({peer:x.peer,isMe:false,presence:x.presence})))},50)}
+ function client(){const cp=new Peer();let conn=null,my=null;const bad=()=>again(cp);
+  cp.on('open',id=>{my=id;conn=cp.connect(P2P_ID,{reliable:true});
+   conn.on('open',()=>{room={presence(p){if(conn.open)conn.send({t:'p',d:p});return Promise.resolve()}}});
+   conn.on('data',m=>{if(!m)return;
+    if(m.t==='hello')applyPeers((m.peers||[]).map(x=>({peer:x.peer,isMe:false,presence:x.presence})));
+    else if(m.t==='u')applyPeers((m.list||[]).filter(x=>x.peer!==my).map(x=>({peer:x.peer,isMe:false,presence:x.presence})));
+    else if(m.t==='l')dropPeer({peer:m.peer})});
+   conn.on('close',bad);conn.on('error',bad);
+   setTimeout(()=>{if(conn&&!conn.open)bad()},9000)});
+  cp.on('error',bad)}
+}
+document.getElementById('authSrv').value=(WS_URL&&!/localhost|127\.0\.0\.1/.test(WS_URL))?WS_URL:'';
+connectMP();
 function mpUpdate(dt){
  if(started){if(hp<100)hp=Math.min(100,hp+3*dt);$('hp').style.width=hp+'%';lastSend+=dt;
   if(room&&lastSend>.1){lastSend=0;const r=q=>Math.round(q*100)/100;room.presence({o:sel.slice(),id:RID,w:wp,n:pname,x:r(ch.position.x),z:r(ch.position.z),r:r(ch.rotation.y),ic:inCar?1:0,cx:r(car.position.x),cz:r(car.position.z),cr:r(car.rotation.y),ct:car.userData.carType||'sedan',cc:'#'+car.userData.body.material.color.getHexString(),hp:Math.round(hp),ev:evs.slice()}).catch(()=>{})}}
