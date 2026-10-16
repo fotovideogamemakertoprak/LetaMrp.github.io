@@ -12,7 +12,10 @@ canvas#c{display:block}
 #authCard h1{margin:0 0 20px;color:var(--ac);text-align:center;font-size:36px}
 #authCard label{display:block;margin-bottom:6px;font-size:20px}
 #authCard input{width:100%;background:#000;color:#fff;border:1px solid #555;padding:8px 12px;font:inherit;font-size:20px;margin-bottom:16px}
-#authCard button{width:100%;background:var(--ac);color:#111;border:0;padding:10px;font:inherit;font-size:22px;font-weight:700;cursor:pointer;margin-top:10px}
+.authBtnGroup{display:flex;gap:10px;margin-top:10px}
+.authBtnGroup button{flex:1;border:0;padding:10px;font:inherit;font-size:20px;font-weight:700;cursor:pointer}
+#loginBtn{background:#3498db;color:#fff}
+#registerBtn{background:var(--ac);color:#111}
 #authMsg{color:#f4d36a;margin-top:10px;text-align:center;min-height:24px;font-size:18px}
 #menu{position:fixed;left:3vw;top:calc(6vh + env(safe-area-inset-top,0px));width:min(380px,94vw);max-height:88vh;overflow:auto;background:rgba(0,0,0,.72);display:none}
 #menu .hd{background:var(--ac);color:#000;font-size:34px;font-weight:700;padding:8px 14px;letter-spacing:1px}
@@ -92,7 +95,10 @@ canvas#c{display:block}
     <input id="authPwd" type="password" maxlength="20" placeholder="Şifrenizi girin">
     <label>Sunucu adresi (isteğe bağlı)</label>
     <input id="authSrv" placeholder="wss://xxxx.onrender.com">
-    <button id="authBtn">Giriş Yap / Kaydol</button>
+    <div class="authBtnGroup">
+      <button id="loginBtn">Giriş Yap</button>
+      <button id="registerBtn">Kayıt Ol</button>
+    </div>
     <div id="authMsg"></div>
   </div>
 </div>
@@ -153,23 +159,69 @@ let currentUser = null; let aimMode=false; let adminOpen=false;
 let cash = 25000, ownedCars = [0], carFuel = 100;
 let savedData = { cash: 25000, inventory: { sigara: 2, telefon: 1, kacakPaket: 0 }, ownedCars: [0], weapons:[1], sel: [1,1,1,0,2,0,3,1,0,0,2,1,5] };
 
-function doLogin() {
+// YENİ VE HATASIZ KAYIT OLMA FONKSİYONU
+function handleRegister() {
   const u = document.getElementById('authUsr').value.trim();
   const p = document.getElementById('authPwd').value.trim();
   const msg = document.getElementById('authMsg');
-  if(!u || !p) { msg.textContent = 'Kullanıcı adı ve şifre girilmelidir.'; return; }
+  if(!u || !p) { msg.style.color = '#e74c3c'; msg.textContent = 'Kullanıcı adı ve şifre boş olamaz.'; return; }
 
   let users = {};
   try { users = JSON.parse(localStorage.getItem('losBursaUsers') || '{}'); } catch(e) { users = {}; }
-  
+
   if(users[u]) {
-    if(users[u].pwd !== p) { msg.textContent = 'Şifre hatalı!'; return; }
-    savedData = users[u].data || {};
-  } else {
-    users[u] = { pwd: p, data: savedData, createdAt: Date.now() };
-    try { localStorage.setItem('losBursaUsers', JSON.stringify(users)); } catch(e) {}
+    msg.style.color = '#e74c3c';
+    msg.textContent = 'Bu kullanıcı adı zaten alınmış! Lütfen Giriş Yapın.';
+    return;
   }
+
+  const initialData = { 
+    cash: 25000, 
+    inventory: { sigara: 2, telefon: 1, kacakPaket: 0 }, 
+    ownedCars: [0], 
+    weapons: [1], 
+    sel: [1,1,1,0,2,0,3,1,0,0,2,1,5,0,1,0,1,1],
+    characterCreated: false 
+  };
+
+  users[u] = { pwd: p, data: initialData, createdAt: Date.now() };
+  try { 
+    localStorage.setItem('losBursaUsers', JSON.stringify(users)); 
+  } catch(e) {
+    msg.style.color = '#e74c3c';
+    msg.textContent = 'Kayıt kaydedilemedi (Depolama sorunu).';
+    return;
+  }
+
+  msg.style.color = '#2ecc71';
+  msg.textContent = 'Kayıt başarılı! Şimdi "Giriş Yap" butonuna basabilirsin.';
+}
+
+// YENİ VE HATASIZ GİRİŞ YAPMA FONKSİYONU
+function handleLogin() {
+  const u = document.getElementById('authUsr').value.trim();
+  const p = document.getElementById('authPwd').value.trim();
+  const msg = document.getElementById('authMsg');
+  if(!u || !p) { msg.style.color = '#e74c3c'; msg.textContent = 'Kullanıcı adı ve şifre girilmelidir.'; return; }
+
+  let users = {};
+  try { users = JSON.parse(localStorage.getItem('losBursaUsers') || '{}'); } catch(e) { users = {}; }
+
+  if(!users[u]) {
+    msg.style.color = '#e74c3c';
+    msg.textContent = 'Kullanıcı bulunamadı! Önce "Kayıt Ol" butonuna basın.';
+    return;
+  }
+
+  if(users[u].pwd !== p) {
+    msg.style.color = '#e74c3c';
+    msg.textContent = 'Şifre hatalı!';
+    return;
+  }
+
+  savedData = users[u].data || {};
   currentUser = u;
+
   const sv = document.getElementById('authSrv').value.trim();
   if(sv) { 
     let u2 = sv.replace(/^https:/,'wss:').replace(/^http:/,'ws:'); 
@@ -177,8 +229,10 @@ function doLogin() {
     try { localStorage.setItem('losBursaServer', u2); } catch(e) {} 
     WS_URL = u2; 
   }
+
   document.getElementById('authBox').style.display = 'none';
   document.getElementById('menu').style.display = 'block';
+
   const sd = savedData.sel || [];
   for(let i=0; i<sel.length && i<sd.length; i++) sel[i] = sd[i];
   cash = savedData.cash ?? 25000;
@@ -186,10 +240,13 @@ function doLogin() {
   Object.assign(inventory, savedData.inventory || {});
   pname = u;
   $('nm').value = u;
-  draw(); prev();
+  draw(); 
+  prev();
 }
-document.getElementById('authBtn').onclick = doLogin;
-document.getElementById('authPwd').addEventListener('keydown', e => { if(e.key === 'Enter') doLogin(); });
+
+document.getElementById('loginBtn').onclick = handleLogin;
+document.getElementById('registerBtn').onclick = handleRegister;
+document.getElementById('authPwd').addEventListener('keydown', e => { if(e.key === 'Enter') handleLogin(); });
 
 function saveGame() {
   if(!currentUser) return;
@@ -511,7 +568,7 @@ addEventListener('keydown',e=>{
   if(e.code=='KeyN'||(e.code=='Escape'&&mapOpen))toggleMap();
   if(e.code=='KeyT'||e.code=='Enter'){e.preventDefault();openChat();}
   if(e.code==='F7'&&currentUser==='admin'){toggleAdmin();e.preventDefault()}
-  if(e.code==='Space'&&!inCar&&started&&!shopOpen&&!garageOpen){if(ch.position.y<=0.03)jumpV=7.5;e.preventDefault()}
+  if(e.code=='Space'&&!inCar&&started&&!shopOpen&&!garageOpen){if(ch.position.y<=0.03)jumpV=7.5;e.preventDefault()}
   if(e.code=='Digit1')setW(1);if(e.code=='Digit2')setW(2);if(e.code=='Digit3')setW(3);if(e.code=='Digit4')setW(4);if(e.code=='Digit5')setW(5);if(e.code=='Digit0')setW(0);
   if(e.code=='KeyR')reload()
 });
@@ -568,7 +625,7 @@ function hud(){$('wp').textContent=wp?WP[wp].n+'  '+(reloadT>0?'dolduruluyor…'
 function setW(w){
   if(inCar||!started)return;
   if(w&&!(savedData.weapons||[]).includes(w)){show('sys','','Bu silah sende yok.');return}
-  wp=w;setWeapon(ch,w);ammo=w?WP[w].mag:0;reloadT=0;hud();
+  wp=w;setWeapon(ch,w);ammo=w?WP[wp].mag:0;reloadT=0;hud();
 }
 function reload(){if(wp&&ammo<WP[wp].mag&&reloadT<=0){reloadT=1.3;hud()}}
 function tracer(a,b){const g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(...a),new THREE.Vector3(...b)]);const l=new THREE.Line(g,new THREE.LineBasicMaterial({color:0xffe08a}));S.add(l);tr.push({l,t:.07})}
@@ -675,20 +732,15 @@ function tick(){requestAnimationFrame(tick);const dt=Math.min(clock.getDelta(),.
    else mvS=0;if(jumpV!==0||ch.position.y>0){jumpV-=18*dt;ch.position.y=Math.max(0,ch.position.y+jumpV*dt);if(ch.position.y===0)jumpV=0}ch.userData.air=ch.position.y>.03?1:0;animate(ch,dt,mvS);if(wp){ch.rotation.y+=ad(ch.rotation.y,yaw+Math.PI)*Math.min(1,dt*14);armPose(ch,wp)}
    $('spd').textContent=ch.position.distanceTo(car.position)<5?'E':'';}
   const tgt=inCar?car.position:ch.position,dist=inCar?9:(aimMode?3.1:5.5),cy=inCar?ang+Math.PI:yaw,cp=inCar?.28:pitch;
-  C.position.lerp(new THREE.Vector3(tgt.x+Math.sin(cy)*dist*Math.cos(cp),tgt.y+2+Math.sin(cp)*dist,tgt.z+Math.cos(cy)*dist*Math.cos(cp)),inCar?.12:.3);C.lookAt(tgt.x,tgt.y+1.4Kullanıcının gönderdiği HTML dosyasındaki (`index (8).html`) kaydolma ve giriş sistemini inceledim. Kodda yer alan `doLogin()` fonksiyonunu ve `localStorage` yapısını kontrol ettiğimizde, kaydolma/giriş mekanizmasının çalışmamasının veya hata vermesinin arkasındaki temel sebepleri ve çözüm yollarını belirledim.
-
-### Sorunun Kaynağı Nedir?
-1. **`localStorage` Veri Yapısı Uyuşmazlığı:** Tarayıcının `localStorage` alanında daha önceden bozuk, eksik veya farklı bir formatta (`losBursaUsers` anahtarıyla) veri kalmış olabilir. Bu durum `JSON.parse` sırasında hataya yol açarak giriş işlemini kırabilir.
-2. **Kullanıcı Bilgilerinin Güncellenmesi veya Şifre Doğrulama Çakışması:** Aynı kullanıcı adıyla daha önce farklı bir şifre kaydedildiyse veya `savedData` nesnesi bozulduysa sistem hata mesajı döndürebilir.
-3. **Alan Adı (Domain) veya Tarayıcı Gizli Mod Kısıtlamaları:** Tarayıcılar (özellikle gizli sekme veya sıkı gizlilik ayarlarında) `localStorage` kullanımını engelleyebilir veya kısıtlayabilir.
-
----
-
-### Çözüm İçin Ne Yapmalısın?
-
-Tarayıcının konsolunda (`F12` -> *Console*) bir hata alıyorsan veya giriş yaparken sayfa tepki vermiyorsa, aşağıdaki adımları uygulayarak sorunu düzeltebilirsin:
-
-#### 1. Tarayıcı Yerel Verilerini (localStorage) Sıfırlama
-Daha önceki bozuk kayıtları temizlemek için tarayıcının konsoluna şu komutu yazıp **Enter** tuşuna basarak verileri sıfırlayabilirsin:
-```javascript
-localStorage.removeItem('losBursaUsers');
+  C.position.lerp(new THREE.Vector3(tgt.x+Math.sin(cy)*dist*Math.cos(cp),tgt.y+2+Math.sin(cp)*dist,tgt.z+Math.cos(cy)*dist*Math.cos(cp)),inCar?.12:.3);C.lookAt(tgt.x,tgt.y+1.4,tgt.z);
+  updSky(tgt);sun.target.position.copy(tgt);radar();
+  const m=Math.floor(gameMin());$('clk').textContent=String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
+ else{updSky(PV);const fz=cur>=13&&cur<OP.length;if(fz)pvc.rotation.y+=ad(pvc.rotation.y,.25)*Math.min(1,dt*6);else pvc.rotation.y+=dt*.6;animate(pvc,dt,0);C.position.set(PV.x,fz?1.75:1.4,PV.z+(fz?1.5:4.2));C.lookAt(PV.x-(fz?.3:1.4),fz?1.72:1.1,PV.z);sun.position.set(PV.x+6,12,PV.z+8);sun.target.position.copy(PV)}
+ for(let i=tr.length-1;i>=0;i--){tr[i].t-=dt;if(tr[i].t<=0){S.remove(tr[i].l);tr[i].l.geometry.dispose();tr.splice(i,1)}}
+ for(let i=bub.length-1;i>=0;i--){const q=bub[i];q.t-=dt;q.s.position.set(q.obj.position.x,4.2,q.obj.position.z);if(q.t<=0){S.remove(q.s);bub.splice(i,1)}}
+ updPuffs(dt);for(let i=explosions.length-1;i>=0;i--){const x=explosions[i];x.t+=dt;const k=x.t/x.duration;x.core.scale.setScalar(1+k*4);x.core.material.opacity=Math.max(0,.9-k);x.smoke.position.y+=dt*1.5;x.smoke.scale.setScalar(1+k*3);x.smoke.material.opacity=Math.max(0,.8-k*.7);
+  if(x.t>=x.duration){S.remove(x.core,x.smoke);explosions.splice(i,1);const tg=x.target;setTimeout(()=>{tg.userData.destroyed=false;tg.visible=true},8000)}}
+ if(started){if(reloadT>0){reloadT-=dt;if(reloadT<=0){ammo=WP[wp].mag;hud()}}if(firing&&wp>=2&&wp<=5)shoot();flash=Math.max(0,flash-dt);$('fl').style.opacity=Math.min(1,flash*2.5)}
+ mpUpdate(dt);R.render(S,C)}
+tick();
+</script></body></html>
