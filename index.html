@@ -43,7 +43,6 @@ canvas#c{display:block}
 .carCard button,#garageClose{font:inherit;font-size:19px;padding:7px 12px;background:#e6b422;color:#111;border:0;cursor:pointer;margin-top:8px}
 #garageClose{float:right;background:#444;color:#fff}#garageMsg{min-height:24px;color:#f4d36a;margin-top:10px}
 
-/* UI Modals (Phone, Inventory, RP, Admin) */
 #phoneModal,#invModal,#tradeModal{display:none;position:fixed;z-index:45;left:50%;top:50%;transform:translate(-50%,-50%);width:min(480px,92vw);max-height:85vh;overflow:auto;background:rgba(15,18,25,0.98);border:2px solid var(--ac);box-shadow:0 0 40px #000;padding:20px;border-radius:12px}
 #phoneModal h2,#invModal h2,#tradeModal h2{margin:0 0 12px;color:var(--ac);font-size:30px}
 .phoneScreen{background:#0a0c12;border:1px solid #333;padding:15px;border-radius:8px;min-height:260px;margin-bottom:15px;display:flex;flex-direction:column;gap:10px;overflow-y:auto;max-height:200px}
@@ -91,7 +90,7 @@ canvas#c{display:block}
     <input id="authUsr" maxlength="14" placeholder="Kullanıcı adınızı girin">
     <label>Şifre</label>
     <input id="authPwd" type="password" maxlength="20" placeholder="Şifrenizi girin">
-    <label>Sunucu adresi (isteğe bağlı, boş bırak = sunucusuz)</label>
+    <label>Sunucu adresi (isteğe bağlı)</label>
     <input id="authSrv" placeholder="wss://xxxx.onrender.com">
     <button id="authBtn">Giriş Yap / Kaydol</button>
     <div id="authMsg"></div>
@@ -104,32 +103,29 @@ canvas#c{display:block}
 <div id="ft"></div></div>
 <div class="hud" id="radar"><canvas id="rad" width="190" height="190"></canvas><div class="bar"><div id="hp" style="width:100%;background:#4caf50"></div></div><div class="bar"><div style="width:60%;background:#3b82c4"></div></div></div>
 <div class="hud" id="spd">0</div>
-<div class="hud" id="tip">WASD hareket · Shift koş · Space zıpla/fren · Sağ tık nişan · Sol tık ateş/yumruk (F) · Tab basılı tut: silah menüsü · C sigara · N harita · E bin/in/benzin · B galeri · M market · J meslek · P telefon · I envanter · 1-5 silah · R doldur · T sohbet/telefon mesaj</div>
+<div class="hud" id="tip">WASD hareket · Shift koş · Space zıpla/fren · Sağ tık nişan · Sol tık ateş/yumruk (F) · Tab basılı tut: silah menüsü · C sigara · N harita · E bin/in/benzin · B galeri · M market · J meslek · P telefon · I envanter · 1-5 silah · R doldur · T sohbet</div>
 <div class="hud" id="wp"></div>
 <div class="hud" id="chat"><div id="cl"></div><input id="ci" maxlength="120" placeholder="/me, /do veya mesaj yaz" style="display:none"></div>
 
-<!-- Telefon Sistemi Modalı -->
 <div id="phoneModal">
   <button class="rpClose" onclick="closePhone()">Kapat</button>
   <h2>📱 LOS BURSA CEP TELEFONU</h2>
   <div style="margin-bottom:10px">Aktif Görüşme / Arama: <b id="phoneTargetName">Yok</b></div>
   <div class="phoneScreen" id="phoneChatScreen">
-    <div class="phoneMsgItem">Sistem: Telefon sistemine hoş geldiniz. Rehberden bir kişi seçin veya arama yapın.</div>
+    <div class="phoneMsgItem">Sistem: Telefon sistemine hoş geldiniz.</div>
   </div>
   <input id="phoneInput" placeholder="Mesaj yaz veya ara..." maxlength="100" style="width:100%;background:#000;color:#fff;border:1px solid #555;padding:8px;font:inherit;margin-bottom:8px">
   <div style="display:flex;gap:10px">
     <button class="phoneBtn" style="flex:1" onclick="sendPhoneMsg()">Mesaj Gönder</button>
     <button class="phoneBtn" style="background:#e74c3c;flex:1" onclick="hangUpCall()">Telefonu Kapat</button>
   </div>
-  <h3 style="margin:12px 0 6px;color:var(--ac)">Kişiler & Oyuncular</h3>
+  <h3 style="margin:12px 0 6px;color:var(--ac)">Kişiler</h3>
   <div id="phoneContactsList" style="display:flex;flex-direction:column;gap:6px;max-height:130px;overflow-y:auto"></div>
 </div>
 
-<!-- Envanter ve Takas Modalı -->
 <div id="invModal">
   <button class="rpClose" onclick="closeInv()">Kapat</button>
   <h2>🎒 ENVANTER & EŞYALAR</h2>
-  <p>Silahlar, araç anahtarları ve eşyalarınız. Yakınınızdaki oyuncularla takas yapabilirsiniz.</p>
   <div class="invGrid" id="invCardsContainer"></div>
   <div id="invMsg" style="margin-top:10px;color:#f4d36a;min-height:22px"></div>
 </div>
@@ -141,13 +137,13 @@ canvas#c{display:block}
 </div>
 
 <div id="hint"></div><div id="vig"></div><div id="stars"></div>
-<div id="bigmap"><canvas id="bm" width="700" height="700"></canvas><div id="bmh">N / Esc: kapat · beyaz ok: sen · kırmızı: polis · sarı: görev</div></div>
+<div id="bigmap"><canvas id="bm" width="700" height="700"></canvas><div id="bmh">N / Esc: kapat</div></div>
 <div id="wheel"></div><div id="xh"></div><div id="aimRing"></div><div id="fl"></div>
 <div id="npcHud">NPC: <span id="npcCount">0</span> · Etkisiz: <span id="killCount">0</span></div>
 <div id="rpHud">Para: <b id="moneyHud">$25.000</b><br><span id="jobHud">Meslek: Yok</span><br><span id="invHud">Envanter: Boş</span><br><span id="fuelHud">Benzin: %100</span></div>
 <div id="rpPanel"><button class="rpClose" id="rpClose">Kapat (Esc)</button><h2 id="rpTitle">LOS BURSA</h2><div id="rpBody"></div><div id="rpMsg"></div></div>
-<div id="garage"><button id="garageClose">Kapat (B)</button><h2>LOS BURSA · ARAÇ GALERİSİ</h2><div class="sub">Bütçe: <b id="cash">$25.000</b> · Bir araç seç ve satın al.</div><div id="carsGrid"></div><div id="garageMsg"></div></div>
-<div id="adminPanel"><button id="adminClose" style="float:right">Kapat (F7)</button><h2>LOS BURSA · YÖNETİM PANELİ</h2><div class="adminGrid"><div class="adminCard"><b>Oyuncuya para ver</b><input id="adminTarget" placeholder="Kullanıcı adı"><input id="adminAmount" type="number" min="1" value="5000" placeholder="Miktar"><button id="adminGive">Para ver</button></div><div class="adminCard"><b>Hesap yönetimi</b><p>Hesap silme, bu tarayıcıdaki yerel kayıtları kaldırır.</p><input id="adminDeleteName" placeholder="Silinecek kullanıcı adı"><button class="danger" id="adminDelete">Hesabı sil</button></div><div class="adminCard"><b>Yönetim notu</b><p>Yönetici kullanıcı adı: <b>admin</b>. F7 ile aç/kapat.</p></div></div><div id="adminUsers"></div><div id="adminMsg"></div></div><div class="hud" id="top"><span id="clk">12:00</span><br><span id="on" style="font-size:20px">Çevrimiçi: 1</span></div>
+<div id="garage"><button id="garageClose">Kapat (B)</button><h2>LOS BURSA · ARAÇ GALERİSİ</h2><div class="sub">Bütçe: <b id="cash">$25.000</b></div><div id="carsGrid"></div><div id="garageMsg"></div></div>
+<div id="adminPanel"><button id="adminClose" style="float:right">Kapat (F7)</button><h2>LOS BURSA · YÖNETİM PANELİ</h2><div class="adminGrid"><div class="adminCard"><b>Oyuncuya para ver</b><input id="adminTarget" placeholder="Kullanıcı adı"><input id="adminAmount" type="number" min="1" value="5000" placeholder="Miktar"><button id="adminGive">Para ver</button></div><div class="adminCard"><b>Hesap yönetimi</b><input id="adminDeleteName" placeholder="Silinecek kullanıcı adı"><button class="danger" id="adminDelete">Hesabı sil</button></div></div><div id="adminUsers"></div><div id="adminMsg"></div></div><div class="hud" id="top"><span id="clk">12:00</span><br><span id="on" style="font-size:20px">Çevrimiçi: 1</span></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -165,6 +161,7 @@ function doLogin() {
 
   let users = {};
   try { users = JSON.parse(localStorage.getItem('losBursaUsers') || '{}'); } catch(e) { users = {}; }
+  
   if(users[u]) {
     if(users[u].pwd !== p) { msg.textContent = 'Şifre hatalı!'; return; }
     savedData = users[u].data || {};
@@ -174,7 +171,12 @@ function doLogin() {
   }
   currentUser = u;
   const sv = document.getElementById('authSrv').value.trim();
-  if(sv) { let u2 = sv.replace(/^https:/,'wss:').replace(/^http:/,'ws:'); if(!/^wss?:/.test(u2)) u2 = 'wss://' + u2; try { localStorage.setItem('losBursaServer', u2); } catch(e) {} WS_URL = u2; if(!usingWS&&wsLive){ location.reload(); return; } connectMP(); }
+  if(sv) { 
+    let u2 = sv.replace(/^https:/,'wss:').replace(/^http:/,'ws:'); 
+    if(!/^wss?:/.test(u2)) u2 = 'wss://' + u2; 
+    try { localStorage.setItem('losBursaServer', u2); } catch(e) {} 
+    WS_URL = u2; 
+  }
   document.getElementById('authBox').style.display = 'none';
   document.getElementById('menu').style.display = 'block';
   const sd = savedData.sel || [];
@@ -219,7 +221,8 @@ const G=new THREE.Mesh(new THREE.PlaneGeometry(1800,1800),M(0x4d6b45));G.rotatio
 const BL=60,N=8,H=BL*N/2,road=M(0x2a2b30,{roughness:.5,metalness:.15}),line=M(0xe8e2c0,{emissive:0x333322}),LIM=H+20;
 for(let i=-N/2;i<=N/2;i++){const p=i*BL;box(10,.1,BL*N+10,road,p,.05,0);box(BL*N+10,.1,10,road,0,.06,p);
  for(let k=-H;k<H;k+=10){box(.3,.02,4,line,p,.12,k+3);box(4,.02,.3,line,k+3,.13,p)}}
-const cols=[0x8a8f9c,0xb59f84,0x6f7d92,0xa86c5b,0x9aa59a],colliders=[],rnd=(a,b)=>a+Math.random()*(b-a);
+const cols=[0x8a8f9c,0xb59f84,0x6f7d92,0xa86c5b,0x9aa59a],colliders=[];
+const rnd=(a,b)=>a+Math.random()*(b-a);
 const mkAtlas=lit=>{const c=document.createElement('canvas');c.width=c.height=512;const x=c.getContext('2d');
  if(!lit){x.fillStyle='#d6d2c8';x.fillRect(0,0,512,512)}else{x.fillStyle='#000';x.fillRect(0,0,512,512)}
  for(let i=0;i<8;i++)for(let j=0;j<8;j++){const X=i*64,Y=j*64;if(lit){if(Math.random()<.45){x.fillStyle=Math.random()<.7?'#ffcf7a':'#bfe3ff';x.fillRect(X+12,Y+10,40,44)}}
@@ -232,41 +235,28 @@ for(let i=-N/2;i<N/2;i++)for(let j=-N/2;j<N/2;j++){const cx=i*BL+BL/2,cz=j*BL+BL
   const me=new THREE.Mesh(ge,bm[Math.floor(Math.random()*5)]);me.position.set(x,h/2,z);me.castShadow=me.receiveShadow=true;S.add(me);
   colliders.push({x,z,w:w/2+.8,d:d/2+.8})}}
 
-// ---- BENZİN İSTASYONLARI VE DEV HAREKETLİ MASKOT (TUBE MAN) ----
 const gasStations=[{x:80,z:80},{x:-120,z:-120},{x:100,z:-100}];
 const mascots=[];
 function buildGasStations(){
   gasStations.forEach(g=>{
-    // Benzin pompası gölgelik/çatı
     box(8,.4,5,M(0xc0392b),g.x,4,g.z);
     [-3,3].forEach(ox=>box(.4,4,.4,M(0x7f8c8d),g.x+ox,2,g.z));
-    // Pompalar
     box(1.2,1.8,1.2,M(0xf1c40f),g.x-2,1,g.z-1);
     box(1.2,1.8,1.2,M(0xf1c40f),g.x-2,1,g.z+1);
 
-    // Kocaman Balon Figür / Maskot (Tube Man / Air Dancer)
     const mGroup=new THREE.Group();
     mGroup.position.set(g.x+3.5,0,g.z);
-    // Gövde (kumaş tüp)
-    const bodyGeo=new THREE.CylinderGeometry(0.5,0.7,5,8,10);
-    const bodyMat=new THREE.MeshStandardMaterial({color:0x3498db,roughness:0.4,emissive:0x113355});
-    const bodyMesh=new THREE.Mesh(bodyGeo,bodyMat);
-    bodyMesh.position.y=2.5;
-    mGroup.add(bodyMesh);
+    const bodyMesh=new THREE.Mesh(new THREE.CylinderGeometry(0.5,0.7,5,8,10),new THREE.MeshStandardMaterial({color:0x3498db,roughness:0.4,emissive:0x113355}));
+    bodyMesh.position.y=2.5; mGroup.add(bodyMesh);
 
-    // Kafa / Gülen Yüz topu
     const headMesh=new THREE.Mesh(new THREE.SphereGeometry(0.8,12,12),M(0xe67e22));
-    headMesh.position.y=5.3;
-    mGroup.add(headMesh);
+    headMesh.position.y=5.3; mGroup.add(headMesh);
 
-    // Kollar (El kol hareketleriyle müşteri çeken kollar)
     const armL=new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.18,3.2),M(0xe74c3c));
-    armL.position.set(-0.9,4.2,0); armL.rotation.z=Math.PI/4;
-    mGroup.add(armL);
+    armL.position.set(-0.9,4.2,0); armL.rotation.z=Math.PI/4; mGroup.add(armL);
 
     const armR=new THREE.Mesh(new THREE.CylinderGeometry(0.18,0.18,3.2),M(0xe74c3c));
-    armR.position.set(0.9,4.2,0); armR.rotation.z=-Math.PI/4;
-    mGroup.add(armR);
+    armR.position.set(0.9,4.2,0); armR.rotation.z=-Math.PI/4; mGroup.add(armR);
 
     S.add(mGroup);
     mascots.push({group:mGroup,armL,armR,head:headMesh,body:bodyMesh});
@@ -332,7 +322,7 @@ function makeCar(color,type='sedan'){
  [-.7,.7].forEach(x=>{box(.4,.2,.1,M(0xfff6c0,{emissive:0xfff0a0}),x,.8,length/2,g);box(.4,.2,.1,M(0xaa0000,{emissive:0x660000}),x,.8,-length/2,g)});
  g.userData.body=g.children[0];g.userData.carType=type;return g
 }
-// ---- Türk bayrakları, evler (v2), cami
+
 const fTex=(()=>{const c=document.createElement('canvas');c.width=300;c.height=200;const x=c.getContext('2d');x.fillStyle='#e30a17';x.fillRect(0,0,300,200);x.fillStyle='#fff';x.beginPath();x.arc(112,100,50,0,7);x.fill();x.fillStyle='#e30a17';x.beginPath();x.arc(130,100,40,0,7);x.fill();x.fillStyle='#fff';x.beginPath();for(let i=0;i<10;i++){const r=i%2?10:24,a=-Math.PI/2+i*Math.PI/5;x.lineTo(190+Math.cos(a)*r,100+Math.sin(a)*r)}x.fill();return new THREE.CanvasTexture(c)})();
 const flagGeo=new THREE.PlaneGeometry(3,2,10,6);flagGeo.translate(1.5,0,0);const fOrig=flagGeo.attributes.position.array.slice(),flagMat=new THREE.MeshLambertMaterial({map:fTex,side:THREE.DoubleSide,emissive:0x331111});
 function addFlag(x,y,z,ry,sc){const ph=y+sc*1.1,pl=new THREE.Mesh(new THREE.CylinderGeometry(.05,.07,ph,6),M(0xcfcfcf));pl.position.set(x,ph/2,z);S.add(pl);const f=new THREE.Mesh(flagGeo,flagMat);f.position.set(x,y,z);f.rotation.y=ry;f.scale.setScalar(sc);S.add(f)}
@@ -365,7 +355,6 @@ box(46,.04,46,M(0x4f8a3e),-30,.11,30);buildMosque(-30,30);
 function tryLoot(){if(!started||inCar||stealing)return false;const P=ch.position;for(const h of houses)for(const l of h.loot)if(!l.done&&Math.hypot(P.x-l.x,P.z-l.z)<1.9){stealing={h,l,t:1.6};return true}return false}
 function updInt(dt){
  updFlags(clock.elapsedTime);
- // Maskot hareketleri (El kol sallama - Benzinliğe müşteri çekme)
  const tm=clock.elapsedTime;
  mascots.forEach((m,idx)=>{
    m.armL.rotation.z = Math.PI/4 + Math.sin(tm*6 + idx)*0.6;
@@ -377,7 +366,6 @@ function updInt(dt){
  if(!started)return;
  const P=inCar?car.position:ch.position;let hint='';
 
- // Benzin kontrolü
  for(const g of gasStations){
    if(inCar && Math.hypot(P.x-g.x, P.z-g.z) < 4.5){
      hint = 'E: Benzin Doldur ($100)';
@@ -395,7 +383,7 @@ function updInt(dt){
    if(h.done>=h.loot.length){h.reset=150;if(activeJob&&activeJob.type==='robbery'&&activeJob.house===h){const b=Math.floor(rnd(1200,2000));cash+=b;activeJob=null;jobTarget=null;show('sys','','Soygun tamamlandı! Bonus: '+money(b))}}
    updateRP()}}}
  const el=$('hint');el.style.display=hint?'block':'none';if(hint)el.textContent=hint}
-{const _s=startJob;startJob=function(t){if(t!=='robbery')return _s(t);if(activeJob){$('rpMsg').textContent='Önce mevcut görevi bitir veya iptal et.';return}const c=houses.filter(h=>h.done<h.loot.length),h=c[Math.floor(Math.random()*c.length)];if(!h)return;activeJob={type:'robbery',label:'Ev soygunu v2',house:h};jobTarget={x:h.dx,z:h.dz+h.sg*2};jobTimer=0;closeRP();show('sys','','Hedef ev işaretlendi (sarı işaret). İçeri gir, parlayan eşyaları E ile çal. Alarm çalabilir!');updateRP()}}
+{const _s=startJob;startJob=function(t){if(t!=='robbery')return _s(t);if(activeJob){$('rpMsg').textContent='Önce mevcut görevi bitir veya iptal et.';return}const c=houses.filter(h=>h.done<h.loot.length),h=c[Math.floor(Math.random()*c.length)];if(!h)return;activeJob={type:'robbery',label:'Ev soygunu v2',house:h};jobTarget={x:h.dx,z:h.dz+h.sg*2};jobTimer=0;closeRP();show('sys','','Hedef ev işaretlendi. İçeri gir, parlayan eşyaları E ile çal.');updateRP()}}
 doRobbery=function(){if(activeJob&&activeJob.type==='robbery')show('sys','','Eve gir ve parlayan eşyaları E ile çal.');else startJob('robbery')};
 const traffic=[];[0x3355aa,0xaa3333,0xdddddd,0x228855,0x111111,0x884488,0xcc8822,0x555555,0x2288aa,0xeeeeee,0x993355,0x335544,0x777711,0x222266].forEach((c,i)=>{
  const t=makeCar(c,['sedan','sport','suv','pickup','luxury','sedan'][i%6]),lane=(Math.floor(Math.random()*(N+1))-N/2)*BL,hz=i%2==0,dir=Math.random()<.5?1:-1;
@@ -431,7 +419,6 @@ function updateRP(){updStars();if($('moneyHud'))$('moneyHud').textContent=money(
 function openRP(title,body){if(!started)return;Object.keys(K).forEach(k=>K[k]=false);document.exitPointerLock();garageOpen=false;$('garage').style.display='none';$('rpTitle').textContent=title;$('rpBody').innerHTML=body;$('rpMsg').textContent='';$('rpPanel').style.display='block';shopOpen=true;}
 function closeRP(){$('rpPanel').style.display='none';shopOpen=false;updateRP()}
 
-// ---- MARKET VE SİLAHLAR (Çeşitli Silah Modelleri ve Tutuşları) ----
 const WP=[
   null,
   {n:'Tabanca',mag:12,dmg:25,rate:.35,rng:70,price:4500},
@@ -455,7 +442,7 @@ function showMarket(){
     if(cash<WP[w].price){$('rpMsg').textContent='Yeterli paran yok.';return}
     cash-=WP[w].price;
     savedData.weapons=[...(savedData.weapons||[]),w];
-    $('rpMsg').textContent=WP[w].n+' satın alındı! '+w+' tuşu ile kuşanabilirsin.';
+    $('rpMsg').textContent=WP[w].n+' satın alındı!';
     updateRP();
   });
   $('rpBody').querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>{
@@ -465,9 +452,9 @@ function showMarket(){
   });
 }
 
-function showJobs(){openRP('MESLEK MERKEZİ',`<p>Görev seç, hedefe git ve teslimatı tamamlayarak para kazan.</p><div class="rpGrid"><div class="rpCard"><b>Kurye</b><p>Paketleri teslimat noktasına götür.</p><p>Ödül: $650–$1.100</p><button data-job="courier">İşe başla</button></div><div class="rpCard"><b>Kaçak kurye</b><p>Kaçak paket taşı. Önce marketten kaçak paket almalısın.</p><p>Ödül: $1.800–$2.600</p><button data-job="smuggle">İşe başla</button></div><div class="rpCard"><b>Ev soygunu v2</b><p>Ev soy ve parlayan eşyaları çal.</p><p>Ödül: $1.200–$2.000</p><button data-job="robbery">Hedefi göster</button></div></div><button id="cancelJob">Aktif görevi iptal et</button>`);$('rpBody').querySelectorAll('[data-job]').forEach(b=>b.onclick=()=>startJob(b.dataset.job));$('cancelJob').onclick=()=>{activeJob=null;jobTarget=null;jobTimer=0;$('rpMsg').textContent='Görev iptal edildi.';updateRP()};}
-function startJob(type){if(activeJob){$('rpMsg').textContent='Önce mevcut görevi bitir veya iptal et.';return}if(type==='smuggle'&&inventory.kacakPaket<1){$('rpMsg').textContent='Kaçak kurye işi için marketten kaçak paket almalısın.';return}if(type==='smuggle')inventory.kacakPaket--;const targets=[{x:-22,z:18},{x:22,z:-18},{x:-18,z:-22},{x:18,z:22},{x:0,z:26}];let t=targets[Math.floor(Math.random()*targets.length)];if(Math.hypot(ch.position.x-t.x,ch.position.z-t.z)<10)t=targets[(targets.indexOf(t)+2)%targets.length];jobTarget={x:t.x,z:t.z};jobTimer=0;const labels={courier:'Kurye',smuggle:'Kaçak kurye',robbery:'Ev soygunu'};activeJob={type,label:labels[type]};closeRP();show('sys','','Görev başladı. Haritadaki sarı işarete git.');updateRP();}
-function doRobbery(){if(activeJob&&activeJob.type==='robbery'){if(!jobTarget)return;if(Math.hypot(ch.position.x-jobTarget.x,ch.position.z-jobTarget.z)>5){show('sys','','Hedef eve daha yakın olmalısın.');return}jobTimer=8;show('sys','','Soygun başladı! 8 saniye bölgede kal.');closeRP();return}startJob('robbery');}
+function showJobs(){openRP('MESLEK MERKEZİ',`<p>Görev seç, hedefe git ve teslimatı tamamlayarak para kazan.</p><div class="rpGrid"><div class="rpCard"><b>Kurye</b><p>Paketleri teslimat noktasına götür.</p><button data-job="courier">İşe başla</button></div><div class="rpCard"><b>Kaçak kurye</b><p>Kaçak paket taşı.</p><button data-job="smuggle">İşe başla</button></div><div class="rpCard"><b>Ev soygunu v2</b><p>Ev soy ve parlayan eşyaları çal.</p><button data-job="robbery">Hedefi göster</button></div></div><button id="cancelJob">Aktif görevi iptal et</button>`);$('rpBody').querySelectorAll('[data-job]').forEach(b=>b.onclick=()=>startJob(b.dataset.job));$('cancelJob').onclick=()=>{activeJob=null;jobTarget=null;jobTimer=0;$('rpMsg').textContent='Görev iptal edildi.';updateRP()};}
+function startJob(type){if(activeJob){$('rpMsg').textContent='Önce mevcut görevi bitir.';return}if(type==='smuggle'&&inventory.kacakPaket<1){$('rpMsg').textContent='Kaçak paket gerekli.';return}if(type==='smuggle')inventory.kacakPaket--;const targets=[{x:-22,z:18},{x:22,z:-18},{x:-18,z:-22},{x:18,z:22},{x:0,z:26}];let t=targets[Math.floor(Math.random()*targets.length)];jobTarget={x:t.x,z:t.z};jobTimer=0;const labels={courier:'Kurye',smuggle:'Kaçak kurye',robbery:'Ev soygunu'};activeJob={type,label:labels[type]};closeRP();show('sys','','Görev başladı. Haritadaki sarı işarete git.');updateRP();}
+function doRobbery(){if(activeJob&&activeJob.type==='robbery'){if(!jobTarget)return;if(Math.hypot(ch.position.x-jobTarget.x,ch.position.z-jobTarget.z)>5){show('sys','','Hedef eve daha yakın olmalısın.');return}jobTimer=8;show('sys','','Soygun başladı! Bölgede kal.');closeRP();return}startJob('robbery');}
 function useCigarette(){if(inventory.sigara<1){show('sys','','Sigaran yok.');return}if(inCar){show('sys','','Arabadayken içemezsin.');return}if(wp)setW(0);if(!startSmoke(ch))return;inventory.sigara--;pushEv({k:'smoke'});show('sys','','Sigara içiyorsun.');updateRP();}
 
 const npcs=[];let npcKills=0;
@@ -476,92 +463,43 @@ function initNPCs(){for(let i=0;i<40;i++){const lane=Math.floor(rnd(-N/2,N/2+1))
 function killNPC(n){if(!n.alive)return;n.alive=false;n.hp=0;n.g.userData.dead=true;n.g.rotation.z=Math.PI/2;n.g.position.y=.1;n.respawn=18;n.vx=n.vz=0;npcKills++;$('killCount').textContent=npcKills;show('sys','',n.name+' etkisiz hale getirildi.')}
 function updateNPCs(dt){for(const n of npcs){if(!n.alive){n.respawn-=dt;if(n.respawn<=0){n.alive=true;n.hp=100;n.g.visible=true;n.g.rotation.z=0;n.g.position.set(n.homeX+rnd(-5,5),0,n.homeZ+rnd(-5,5));n.wait=rnd(1,4)}continue}n.wait-=dt;if(n.wait<=0){const a=rnd(0,Math.PI*2);n.vx=Math.cos(a)*rnd(.35,1.1);n.vz=Math.sin(a)*rnd(.35,1.1);n.wait=rnd(1.5,5)}const nx=n.g.position.x+n.vx*dt,nz=n.g.position.z+n.vz*dt;if(!hit(nx,nz,.35)){n.g.position.x=nx;n.g.position.z=nz}else{n.vx*=-1;n.vz*=-1}if(Math.abs(n.g.position.x)>H||Math.abs(n.g.position.z)>H){n.vx*=-1;n.vz*=-1}if(Math.hypot(n.vx,n.vz)>.1){n.g.rotation.y=Math.atan2(n.vx,n.vz);animate(n.g,dt,1.3)}else animate(n.g,dt,0)}}
 
-// ---- TELEFON SİSTEMİ & MESAJLAŞMA & ARAMA ----
-let phoneActiveCall = null; // Aktif aranan oyuncu/kişi
-function openPhone(){
-  if(!started)return;
-  document.exitPointerLock();
-  $('phoneModal').style.display='block';
-  renderPhoneContacts();
-}
+let phoneActiveCall = null;
+function openPhone(){if(!started)return;document.exitPointerLock();$('phoneModal').style.display='block';renderPhoneContacts();}
 function closePhone(){ $('phoneModal').style.display='none'; }
 function renderPhoneContacts(){
-  let html = `<div class="phoneMsgItem" style="cursor:pointer" onclick="startCall('Polis İmdat')">🚨 Polis İmdat (155)</div>
-              <div class="phoneMsgItem" style="cursor:pointer" onclick="startCall('Taksi Durağı')">🚕 Taksi Durağı</div>`;
-  for(const id in peersM){
-    const p = peersM[id];
-    const name = p.d?.n || 'Oyuncu';
-    html += `<div class="phoneMsgItem" style="cursor:pointer" onclick="startCall('${name}')">👤 ${name} (Çevrimiçi)</div>`;
-  }
+  let html = `<div class="phoneMsgItem" style="cursor:pointer" onclick="startCall('Polis İmdat')">🚨 Polis İmdat (155)</div>`;
+  for(const id in peersM){const p = peersM[id];const name = p.d?.n || 'Oyuncu';html += `<div class="phoneMsgItem" style="cursor:pointer" onclick="startCall('${name}')">👤 ${name}</div>`;}
   $('phoneContactsList').innerHTML = html;
 }
-function startCall(name){
-  phoneActiveCall = name;
-  $('phoneTargetName').textContent = name;
-  $('phoneChatScreen.innerHTML') += `<div class="phoneMsgItem" style="color:#f1c40f">Arandı: ${name} ile bağlantı kuruldu.</div>`;
-  show('sys','','📞 ' + name + ' arandı.');
-}
-function hangUpCall(){
-  if(!phoneActiveCall) return;
-  show('sys','','📞 ' + phoneActiveCall + ' ile görüşme sonlandırıldı.');
-  phoneActiveCall = null;
-  $('phoneTargetName').textContent = 'Yok';
-}
+function startCall(name){phoneActiveCall = name;$('phoneTargetName').textContent = name;show('sys','','📞 ' + name + ' arandı.');}
+function hangUpCall(){if(!phoneActiveCall) return;phoneActiveCall = null;$('phoneTargetName').textContent = 'Yok';}
 function sendPhoneMsg(){
   const txt = $('phoneInput').value.trim();
   if(!txt) return;
   if(phoneActiveCall){
     $('phoneChatScreen').innerHTML += `<div class="phoneMsgItem" style="text-align:right;background:#2c3e50">Sen: ${txt}</div>`;
     pushEv({k:'phonemsg', to: phoneActiveCall, m: txt, from: pname});
-    show('sys','','📱 ['+phoneActiveCall+'] mesaj gönderildi: '+txt);
-  } else {
-    show('sys','','Önce birini arayın!');
   }
   $('phoneInput').value='';
 }
 
-// ---- ENVANTER VE TAKAS SİSTEMİ (I tuşu) ----
-function openInv(){
-  if(!started) return;
-  document.exitPointerLock();
-  $('invModal').style.display='block';
-  renderInvCards();
-}
+function openInv(){if(!started) return;document.exitPointerLock();$('invModal').style.display='block';renderInvCards();}
 function closeInv(){ $('invModal').style.display='none'; }
 function renderInvCards(){
   let html = `
     <div class="invCard"><b>Sigara</b><p>Adet: ${inventory.sigara}</p><button onclick="useCigarette()">İç</button></div>
-    <div class="invCard"><b>Akıllı Telefon</b><p>Durum: Var</p><button onclick="closeInv();openPhone()">Telefonu Aç</button></div>
-    <div class="invCard"><b>Kaçak Paket</b><p>Adet: ${inventory.kacakPaket}</p><button onclick="show('sys','','Kaçak paket meslekte kullanılır.')">İncele</button></div>
-    <div class="invCard"><b>Araba Anahtarı</b><p>Sahip olunan araç: ${ownedCars.length} adet</p><button onclick="toggleGarage()">Garaj</button></div>
+    <div class="invCard"><b>Telefon</b><p>Var</p><button onclick="closeInv();openPhone()">Aç</button></div>
+    <div class="invCard"><b>Kaçak Paket</b><p>Adet: ${inventory.kacakPaket}</p><button onclick="closeInv()">Kapat</button></div>
   `;
   const myWeapons = savedData.weapons || [1];
-  myWeapons.forEach(w=>{
-    html += `<div class="invCard"><b>${WP[w].n}</b><p>Mermi: ${WP[w].mag}</p><button onclick="setW(${w});closeInv();">Kuşan</button></div>`;
-  });
-  html += `<div class="invCard" style="grid-column:1/-1;background:#2c3e50"><b>🤝 Eşya Takas Et</b><p>Yakındaki oyuncularla silah veya eşya takası yap.</p><button onclick="startTradePrompt()">Takas Başlat</button></div>`;
+  myWeapons.forEach(w=>{html += `<div class="invCard"><b>${WP[w].n}</b><button onclick="setW(${w});closeInv();">Kuşan</button></div>`;});
   $('invCardsContainer').innerHTML = html;
-}
-function startTradePrompt(){
-  let targets = Object.values(peersM).map(e=>e.d?.n).filter(Boolean);
-  if(targets.length===0){$('invMsg').textContent='Yakında takas yapabileceğiniz çevrimiçi oyuncu yok.';return}
-  $('invMsg').textContent='Takas teklifi gönderildi: ' + targets[0];
-  pushEv({k:'trade', from: pname, item: 'Tabanca / Para'});
-  show('sys','','🤝 ' + targets[0] + ' ile takas başlatıldı.');
 }
 
 const K={};
 addEventListener('keydown',e=>{
-  if(started&&e.target===$('ci')){
-    if(e.code=='Enter'){sendChat($('ci').value);closeChat()}
-    if(e.code=='Escape')closeChat();
-    return;
-  }
-  if(started&&e.target===$('phoneInput')){
-    if(e.code=='Enter'){sendPhoneMsg()}
-    if(e.code=='Escape')closePhone();
-    return;
-  }
+  if(started&&e.target===$('ci')){if(e.code=='Enter'){sendChat($('ci').value);closeChat()}if(e.code=='Escape')closeChat();return;}
+  if(started&&e.target===$('phoneInput')){if(e.code=='Enter'){sendPhoneMsg()}if(e.code=='Escape')closePhone();return;}
   if(e.target.tagName=='INPUT'&&!started&&e.target.id!=='nm')return;
   if(started&&e.code=='Tab'){e.preventDefault();if(!e.repeat)openWheel();return}
   K[e.code]=true;if(!started){menuKey(e);return}
@@ -571,11 +509,7 @@ addEventListener('keydown',e=>{
   if(e.code=='KeyP'){if($('phoneModal').style.display==='block')closePhone();else openPhone();}
   if(e.code=='KeyI'){if($('invModal').style.display==='block')closeInv();else openInv();}
   if(e.code=='KeyN'||(e.code=='Escape'&&mapOpen))toggleMap();
-  if(e.code=='KeyT'||e.code=='Enter'){
-    e.preventDefault();
-    if(phoneActiveCall){ openPhone(); $('phoneInput').focus(); }
-    else openChat();
-  }
+  if(e.code=='KeyT'||e.code=='Enter'){e.preventDefault();openChat();}
   if(e.code==='F7'&&currentUser==='admin'){toggleAdmin();e.preventDefault()}
   if(e.code==='Space'&&!inCar&&started&&!shopOpen&&!garageOpen){if(ch.position.y<=0.03)jumpV=7.5;e.preventDefault()}
   if(e.code=='Digit1')setW(1);if(e.code=='Digit2')setW(2);if(e.code=='Digit3')setW(3);if(e.code=='Digit4')setW(4);if(e.code=='Digit5')setW(5);if(e.code=='Digit0')setW(0);
@@ -597,7 +531,7 @@ function renderGarage(){
 }
 $('garageClose').addEventListener('click',()=>{if(garageOpen)toggleGarage()});
 function toggleGarage(){if(!started||shopOpen)return;garageOpen=!garageOpen;$('garage').style.display=garageOpen?'block':'none';if(garageOpen){document.exitPointerLock();renderGarage()}else{$('garageMsg').textContent=''}}
-function buyCar(i){if(shopOpen)return;const c=CAR_TYPES[i];if(!c){$('garageMsg').textContent='Araç bulunamadı.';return}garageSelection=i;if(!ownedCars.includes(i)){if(cash<c.price){$('garageMsg').textContent='Yeterli paran yok! Bütçen: '+money(cash);return}cash-=c.price;ownedCars.push(i);$('garageMsg').textContent=c.name+' satın alındı!'}else $('garageMsg').textContent=c.name+' seçildi.';
+function buyCar(i){if(shopOpen)return;const c=CAR_TYPES[i];if(!c)return;garageSelection=i;if(!ownedCars.includes(i)){if(cash<c.price){$('garageMsg').textContent='Yeterli paran yok!';return}cash-=c.price;ownedCars.push(i);$('garageMsg').textContent=c.name+' satın alındı!'}else $('garageMsg').textContent=c.name+' seçildi.';
  if(inCar){inCar=false;ch.visible=true}if(car)S.remove(car);car=makeCar(c.color,c.type);car.position.copy(ch.position);car.rotation.y=ch.rotation.y;ang=car.rotation.y;S.add(car);v=0;carVel.set(0,0,0);renderGarage();updateRP()}
 function explodeCar(target){
  if(!target||target.userData.destroyed)return;target.userData.destroyed=true;
@@ -611,60 +545,29 @@ const hit=(x,z,r)=>{for(const c of colliders)if(Math.abs(x-c.x)<c.w+r&&Math.abs(
 
 let wp=0,ammo=0,lastShot=0,reloadT=0,firing=false,flash=0;const tr=[],bub=[];
 
-// ---- ÇEŞİTLİ SİLAH MODELLERİ VE ÖZELLEŞTİRİLMİŞ SİLAH TUTUŞLARI ----
 function setWeapon(g,w){
   const U=g.userData;
   if(U.wm){U.wm.parent.remove(U.wm);U.wm=null}
   if(!w)return;
   const m=new THREE.Group(), dk='#1b1b1f', met='#333';
-  if(w==1){ // Tabanca (Pistol)
-    mk(m,BX(.05,.24,.06),dk,0,-.12,.02);
-    mk(m,BX(.045,.06,.14),met,0,-.02,-.07);
-  } else if(w==2){ // Pompalı (Shotgun)
-    mk(m,BX(.07,.75,.1),met,0,-.3,0);
-    mk(m,BX(.06,.22,.12),'#5a3d28',0,.1,-.04);
-    mk(m,BX(.05,.35,.04),dk,0,-.5,.02);
-  } else if(w==3){ // Taarruz Tüfeği (AK-47 / M4)
-    mk(m,BX(.06,.85,.09),met,0,-.35,0);
-    mk(m,BX(.05,.28,.14),'#4a3319',0,.15,-.05);
-    mk(m,BX(.04,.25,.04),dk,0,-.45,.03);
-    mk(m,BX(.03,.12,.08),met,0,-.1,-.08);
-  } else if(w==4){ // Keskin Nişancı (Sniper)
-    mk(m,BX(.06,1.2,.1),met,0,-.45,0);
-    mk(m,BX(.05,.4,.15),'#2f2215',0,.2,-.06);
-    mk(m,BX(.04,.15,.2),met,0,.4,-.08); // Dürbün
-    mk(m,BX(.04,.3,.04),dk,0,-.7,.03);
-  } else if(w==5){ // Hafif Makineli (SMG)
-    mk(m,BX(.06,.45,.08),met,0,-.2,0);
-    mk(m,BX(.05,.18,.12),dk,0,-.05,-.05);
-    mk(m,BX(.03,.25,.03),dk,0,-.35,.02);
-  }
-  m.position.y=-.31;
-  U.arms[1].userData.lo.add(m);
-  U.wm=m;
+  if(w==1){mk(m,BX(.05,.24,.06),dk,0,-.12,.02);mk(m,BX(.045,.06,.14),met,0,-.02,-.07);}
+  else if(w==2){mk(m,BX(.07,.75,.1),met,0,-.3,0);mk(m,BX(.06,.22,.12),'#5a3d28',0,.1,-.04);}
+  else if(w==3){mk(m,BX(.06,.85,.09),met,0,-.35,0);mk(m,BX(.05,.28,.14),'#4a3319',0,.15,-.05);}
+  else if(w==4){mk(m,BX(.06,1.2,.1),met,0,-.45,0);mk(m,BX(.05,.4,.15),'#2f2215',0,.2,-.06);}
+  else if(w==5){mk(m,BX(.06,.45,.08),met,0,-.2,0);mk(m,BX(.05,.18,.12),dk,0,-.05,-.05);}
+  m.position.y=-.31;U.arms[1].userData.lo.add(m);U.wm=m;
 }
 
 function armPose(g,w){
   const A=g.userData.arms;
-  if(w==1){ // Tabanca tutuşu
-    A[1].rotation.x=-1.45; A[1].rotation.z=-.12; A[1].userData.lo.rotation.x=-.05;
-    A[0].rotation.x=-1.25; A[0].rotation.z=.25; A[0].userData.lo.rotation.x=-.2;
-  } else if(w==2 || w==3){ // Tüfek / Pompalı iki elle tutuş
-    A[1].rotation.x=-1.55; A[1].rotation.z=-.2; A[1].userData.lo.rotation.x=-.4;
-    A[0].rotation.x=-1.4; A[0].rotation.z=.4; A[0].userData.lo.rotation.x=-.8;
-  } else if(w==4){ // Sniper uzun duruş
-    A[1].rotation.x=-1.6; A[1].rotation.z=-.15; A[1].userData.lo.rotation.x=-.5;
-    A[0].rotation.x=-1.45; A[0].rotation.z=.35; A[0].userData.lo.rotation.x=-.9;
-  } else if(w==5){ // SMG kompakt tutuş
-    A[1].rotation.x=-1.5; A[1].rotation.z=-.1; A[1].userData.lo.rotation.x=-.3;
-    A[0].rotation.x=-1.35; A[0].rotation.z=.3; A[0].userData.lo.rotation.x=-.5;
-  }
+  if(w==1){A[1].rotation.x=-1.45; A[1].rotation.z=-.12; A[0].rotation.x=-1.25; A[0].rotation.z=.25;}
+  else if(w>=2){A[1].rotation.x=-1.55; A[1].rotation.z=-.2; A[0].rotation.x=-1.4; A[0].rotation.z=.4;}
 }
 
-function hud(){$('wp').textContent=wp?WP[wp].n+'  '+(reloadT>0?'dolduruluyor…':ammo+'/'+WP[wp].mag):'Silah yok (1-5 tuşları ile seç)';$('xh').style.display=wp&&!inCar?'block':'none'}
+function hud(){$('wp').textContent=wp?WP[wp].n+'  '+(reloadT>0?'dolduruluyor…':ammo+'/'+WP[wp].mag):'Silah yok';$('xh').style.display=wp&&!inCar?'block':'none'}
 function setW(w){
   if(inCar||!started)return;
-  if(w&&!(savedData.weapons||[]).includes(w)){show('sys','','Bu silah sende yok. M ile marketten satın al.');return}
+  if(w&&!(savedData.weapons||[]).includes(w)){show('sys','','Bu silah sende yok.');return}
   wp=w;setWeapon(ch,w);ammo=w?WP[w].mag:0;reloadT=0;hud();
 }
 function reload(){if(wp&&ammo<WP[wp].mag&&reloadT<=0){reloadT=1.3;hud()}}
@@ -676,212 +579,82 @@ function shoot(){
   if(ammo<=0){reload();return}
   lastShot=now;ammo--;hud();
   const o=C.position.clone(),dir=new THREE.Vector3();C.getWorldDirection(dir);
-  let end=o.clone().addScaledVector(dir,W.rng),hitId=null,hd=1;
+  let end=o.clone().addScaledVector(dir,W.rng);
   for(let t=2;t<=W.rng;t+=.5){
     const p=o.clone().addScaledVector(dir,t);
-    const cp=cops.find(c=>c.alive&&Math.hypot(p.x-c.g.position.x,p.z-c.g.position.z)<.62&&p.y>.05&&p.y<2.05);if(cp){end=p;hitCop(cp,W.dmg*(p.y>1.6?2:1),dir);break}
     const npc=npcs.find(n=>n.alive&&n.g.visible&&Math.hypot(p.x-n.g.position.x,p.z-n.g.position.z)<.62&&p.y>.05&&p.y<2.05);
-    if(npc){end=p;npc.hp-=W.dmg*(p.y>1.6?2:1);npc.g.rotation.z=.12;if(npc.hp<=0)killNPC(npc);else{npc.g.position.x+=dir.x*.08;npc.g.position.z+=dir.z*.08}break}
-    let pf=false;for(const k in peersM){const e=peersM[k];if(e.g.visible&&e.d&&Math.hypot(p.x-e.g.position.x,p.z-e.g.position.z)<.5&&p.y>0&&p.y<1.95){hitId=e.d.id;hd=p.y>1.6?2:1;end=p;pf=true;break}}if(pf)break;
-    const targets=[...traffic,car,...cruisers];
-    const struck=targets.find(q=>q&&q.visible&&!q.userData.destroyed&&Math.hypot(p.x-q.position.x,p.z-q.position.z)<1.7&&p.y<2.5);
-    if(struck){end=p;explodeCar(struck);break}
+    if(npc){end=p;npc.hp-=W.dmg;if(npc.hp<=0)killNPC(npc);break}
     if(p.y<0||(p.y<12&&hit(p.x,p.z,0))){end=p;break}
   }
-  const m0=ch.position.clone();m0.y+=1.35;m0.x+=-Math.sin(yaw)*.8;m0.z+=-Math.cos(yaw)*.8;const a=m0.toArray().map(q=>+q.toFixed(1)),b=end.toArray().map(q=>+q.toFixed(1));
-  tracer(a,b);pushEv({k:'shot',a,b});if(hitId)pushEv({k:'hit',t:hitId,d:W.dmg*hd,n:pname})
+  const m0=ch.position.clone();m0.y+=1.35;tracer(m0.toArray(),end.toArray());
 }
 document.addEventListener('mousedown',e=>{if(started&&!wheelOpen&&e.button==0&&document.pointerLockElement===R.domElement){firing=true;if(!wp&&!inCar)punch();else shoot()}});document.addEventListener('mouseup',()=>firing=false);
 function addLine(t,c){const d=document.createElement('div');d.textContent=t;d.style.color=c;$('cl').appendChild(d);while($('cl').children.length>8)$('cl').firstChild.remove();setTimeout(()=>d.remove(),25000)}
-function show(t,n,m,obj){if(t=='sys'){addLine(m,'#ffd34d');return}const me=t=='me',dd=t=='do';
- addLine(me?`* ${n} ${m}`:dd?`* ${m} (( ${n} ))`:`${n}: ${m}`,(me||dd)?'#c2a2da':'#fff');if((me||dd)&&obj)bubble(obj,me?`* ${n} ${m}`:`* ${m}`,'#c2a2da')}
-function sendChat(raw){raw=raw.trim();if(!raw)return;const c=raw.match(/^\/(\S+)\s*(.*)$/);let t='say',m=raw;
- if(c){const k=c[1].toLowerCase();if(k=='me'||k=='do'){t=k;m=c[2].trim();if(!m){addLine('Kullanım: /'+k+' mesaj','#ff8080');return}}else{addLine('Komutlar: /me eylem · /do durum tarifi','#ffd34d');return}}
- m=m.slice(0,120);show(t,pname,m,ch);pushEv({k:'chat',t,n:pname,m});closeChat()}
+function show(t,n,m){addLine(t==='sys'?m:`${n}: ${m}`,'#fff');}
+function sendChat(raw){raw=raw.trim();if(!raw)return;show('say',pname,raw);closeChat()}
 function openChat(){document.exitPointerLock();$('ci').style.display='block';$('ci').value='';$('ci').focus()}
 function closeChat(){$('ci').style.display='none';$('ci').blur()}
 hud();
 
-// ---- yumruk, sigara, silah menüsü
 let lastPunch=0;
-function punch(){if(!started||inCar||wp||shopOpen||garageOpen||wheelOpen)return;const now=clock.elapsedTime;if(now-lastPunch<.42)return;lastPunch=now;const U=ch.userData;U.pt=.3;U.ph=!U.ph;ch.rotation.y=yaw+Math.PI;pushEv({k:'punch'});
- setTimeout(()=>{const fx=Math.sin(ch.rotation.y),fz=Math.cos(ch.rotation.y),near=q=>{const dx=q.x-ch.position.x,dz=q.z-ch.position.z,d=Math.hypot(dx,dz);return d>0&&d<1.8&&(dx*fx+dz*fz)/d>.5};
-  for(const c of cops)if(c.alive&&near(c.g.position))hitCop(c,20,{x:fx,z:fz});for(const n of npcs)if(n.alive&&near(n.g.position)){n.hp-=20;n.g.position.x+=fx*.5;n.g.position.z+=fz*.5;if(n.hp<=0)killNPC(n)}
-  for(const k in peersM){const e=peersM[k];if(e.g.visible&&e.d&&near(e.g.position))pushEv({k:'hit',t:e.d.id,d:8,n:pname})}},120)}
+function punch(){if(!started||inCar||wp||shopOpen||garageOpen||wheelOpen)return;const now=clock.elapsedTime;if(now-lastPunch<.42)return;lastPunch=now;const U=ch.userData;U.pt=.3;U.ph=!U.ph;ch.rotation.y=yaw+Math.PI;}
 const puffs=[];let puffTex=null;
 function startSmoke(g){const U=g.userData;if(U.sm>0)return false;U.sm=3.2;U.sp=0;if(!U.cig){const c=new THREE.Group();mk(c,BX(.014,.014,.1),'#f4f1e8',0,0,0);mk(c,BX(.016,.016,.018),'#ff5a1f',0,0,.055);c.position.set(0,-.33,.03);U.arms[1].userData.lo.add(c);U.cig=c}U.cig.visible=true;return true}
 function updPuffs(dt){if(started)[ch,...Object.values(peersM).map(e=>e.g)].forEach(g=>{const U=g.userData;if(!(U.sm>0&&U.sm<2.6&&U.sm>.4)||!g.visible)return;U.sp=(U.sp||0)-dt;if(U.sp>0)return;U.sp=U.sm<1.4?.07:.4;
   if(!puffTex){const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d'),gr=x.createRadialGradient(32,32,2,32,32,30);gr.addColorStop(0,'rgba(235,235,235,.9)');gr.addColorStop(1,'rgba(235,235,235,0)');x.fillStyle=gr;x.fillRect(0,0,64,64);puffTex=new THREE.CanvasTexture(c)}
-  U.H.updateWorldMatrix(true,false);const p=new THREE.Vector3().setFromMatrixPosition(U.H.matrixWorld);p.y+=.18*g.scale.y;p.x+=Math.sin(g.rotation.y)*.2;p.z+=Math.cos(g.rotation.y)*.2;
+  U.H.updateWorldMatrix(true,false);const p=new THREE.Vector3().setFromMatrixPosition(U.H.matrixWorld);p.y+=.18*g.scale.y;
   const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:puffTex,transparent:true,opacity:.55,depthWrite:false}));sp.position.copy(p);sp.scale.setScalar(.15);S.add(sp);puffs.push({sp,t:0,vx:rnd(-.1,.1),vz:rnd(-.1,.1)})});
- for(let i=puffs.length-1;i>=0;i--){const q=puffs[i];q.t+=dt;q.sp.position.y+=dt*.55;q.sp.position.x+=q.vx*dt;q.sp.position.z+=q.vz*dt;q.sp.scale.setScalar(.15+q.t*.5);q.sp.material.opacity=Math.max(0,.55-q.t*.22);if(q.t>2.5){S.remove(q.sp);q.sp.material.dispose();puffs.splice(i,1)}}}
+ for(let i=puffs.length-1;i>=0;i--){const q=puffs[i];q.t+=dt;q.sp.position.y+=dt*.55;if(q.t>2.5){S.remove(q.sp);puffs.splice(i,1)}}
+}
 let wheelOpen=false,wx=0,wy=0,wSel=-1;const WH=[{k:0,n:'Yumruk',a:-120},{k:1,n:'Tabanca',a:-60},{k:2,n:'Pompalı',a:0},{k:3,n:'Tüfek',a:60},{k:4,n:'Sniper',a:120},{k:5,n:'SMG',a:180}];
 function openWheel(){if(!started||inCar||wheelOpen||shopOpen||garageOpen)return;wheelOpen=true;wx=wy=0;wSel=-1;firing=false;
- $('wheel').innerHTML=WH.map((w,i)=>{const ok=w.k==0||(savedData.weapons||[]).includes(w.k),r=w.a*Math.PI/180;return `<div class="ws${ok?'':' lock'}" id="ws${i}" style="left:${Math.cos(r)*110+120}px;top:${Math.sin(r)*110+120}px"><b>${w.n}</b><small>${ok?(w.k?WP[w.k].mag+' mermi':'Çıplak el'):'Yok'}</small></div>`}).join('')+'<div id="wc">Silah</div>';$('wheel').style.display='block'}
+ $('wheel').innerHTML=WH.map((w,i)=>{const ok=w.k==0||(savedData.weapons||[]).includes(w.k),r=w.a*Math.PI/180;return `<div class="ws${ok?'':' lock'}" id="ws${i}" style="left:${Math.cos(r)*110+120}px;top:${Math.sin(r)*110+120}px"><b>${w.n}</b></div>`}).join('')+'<div id="wc">Silah</div>';$('wheel').style.display='block'}
 function wheelMove(e){wx+=e.movementX;wy+=e.movementY;const l=Math.hypot(wx,wy);if(l>120){wx*=120/l;wy*=120/l}let best=-1;if(l>30){const a=Math.atan2(wy,wx)*180/Math.PI;let bd=999;WH.forEach((w,i)=>{const d=Math.abs(((a-w.a+540)%360)-180);if(d<bd){bd=d;best=i}})}wSel=best;WH.forEach((w,i)=>{const el=$('ws'+i);if(el)el.classList.toggle('sel',i==best)})}
 function closeWheel(apply){if(!wheelOpen)return;wheelOpen=false;$('wheel').style.display='none';if(apply&&wSel>=0)setW(WH[wSel].k)}
 
-// ---- arananlık, polis, harita
 let stars=0,copBonus=0,wantedT=0,spawnT=0,mapOpen=false;const cops=[],cruisers=[],COPN=[0,3,6,9,13,18],COP_O=[1,1,0,0,3,0,3,0,1,0,2,1,5],SWAT_O=[1,0,0,1,0,0,0,0,2,1,2,2,5];
 function updStars(){const el=$('stars');if(!el)return;el.style.display=started?'block':'none';el.innerHTML=[1,2,3,4,5].map(i=>`<span class="${i<=stars?'on':'off'}">★</span>`).join('')}
-function addWanted(n){if(!started||n<=0)return;const o=stars;stars=Math.min(5,stars+n);wantedT=0;if(stars!==o){show('sys','','Arananma seviyesi: '+stars+' yıldız!');updStars()}}
-function clearWanted(){stars=0;copBonus=0;wantedT=0;updStars()}
-function spawnCop(){if(cops.length>=34)return;const sw=stars>=4&&Math.random()<.5,g=buildChar(sw?SWAT_O:COP_O);setWeapon(g,1);const P=ch.position;let x,z,t=0;
- do{const a=Math.random()*Math.PI*2,r=rnd(32,55);x=P.x+Math.cos(a)*r;z=P.z+Math.sin(a)*r;t++}while((hit(x,z,.5)||Math.abs(x)>H||Math.abs(z)>H)&&t<20);if(t>=20)return;
- g.position.set(x,0,z);S.add(g);cops.push({g,hp:sw?110:60,alive:true,sw,cd:rnd(.5,1.5),dead:0,idle:0})}
-function hitCop(c,d,dir){if(!c.alive)return;if(!stars)addWanted(1);c.hp-=d;c.g.position.x+=dir.x*.15;c.g.position.z+=dir.z*.15;wantedT=0;
- if(c.hp<=0){c.alive=false;c.g.rotation.z=Math.PI/2;c.g.position.y=.1;copBonus=Math.min(8,copBonus+1);addWanted(1);show('sys','','Polis etkisiz hale getirildi.');spawnCop();spawnCop()}}
-function spawnCruiser(){const t=makeCar(0x1a2440,'sedan'),lb=new THREE.Group();t.userData.lr=box(.45,.14,.3,new THREE.MeshBasicMaterial({color:0xff2222}),-.4,1.5,-.2,lb);t.userData.lb=box(.45,.14,.3,new THREE.MeshBasicMaterial({color:0x2266ff}),.4,1.5,-.2,lb);t.add(lb);
- const P=ch.position;let x,z,k=0;do{const a=Math.random()*6.28,r=rnd(70,100);x=P.x+Math.cos(a)*r;z=P.z+Math.sin(a)*r;k++}while((hit(x,z,2)||Math.abs(x)>H||Math.abs(z)>H)&&k<20);if(k>=20)return;t.position.set(x,0,z);S.add(t);cruisers.push(t)}
-function updWanted(dt){if(!started)return;const P=inCar?car.position:ch.position;let near=1e9;for(const c of cops)if(c.alive)near=Math.min(near,Math.hypot(c.g.position.x-P.x,c.g.position.z-P.z));
- if(stars>0){if(near<45)wantedT=0;else wantedT+=dt;if(wantedT>20){stars--;wantedT=0;if(!stars)copBonus=0;updStars();show('sys','',stars?'Polis izini kaybetti: '+stars+' yıldız.':'Artık aranmıyorsun.')}
-  const want=Math.min(34,COPN[stars]+copBonus*2);spawnT-=dt;if(cops.filter(c=>c.alive).length<want&&spawnT<=0){spawnCop();spawnT=.7}
-  if(cruisers.length<[0,0,0,1,2,3][stars]&&Math.random()<dt)spawnCruiser()}
- $('stars').classList.toggle('flash',stars>0&&near<30);
- for(let i=cops.length-1;i>=0;i--){const c=cops[i],g=c.g;if(!c.alive){c.dead+=dt;if(c.dead>6){S.remove(g);cops.splice(i,1)}continue}
-  const dx=P.x-g.position.x,dz=P.z-g.position.z,d=Math.hypot(dx,dz)||1;
-  if(!stars){c.idle+=dt;if(c.idle>6||d>20){S.remove(g);cops.splice(i,1);continue}}else if(d>110){S.remove(g);cops.splice(i,1);continue}
-  if(inCar&&Math.abs(v)>8&&d<2.4)hitCop(c,45,{x:-dx/d,z:-dz/d});
-  g.rotation.y+=ad(g.rotation.y,Math.atan2(dx,dz))*Math.min(1,dt*10);let sp=0;
-  if(stars&&d>(c.sw?7:11)){sp=c.sw?6.2:5.2;const nx=g.position.x+dx/d*sp*dt,nz=g.position.z+dz/d*sp*dt;let mv=0;if(!hit(nx,g.position.z,.4)){g.position.x=nx;mv=1}if(!hit(g.position.x,nz,.4)){g.position.z=nz;mv=1}if(!mv){g.position.x+=-dz/d*sp*dt;g.position.z+=dx/d*sp*dt}}
-  animate(g,dt,sp);armPose(g,1);c.cd-=dt;
-  if(stars&&d<40&&c.cd<=0){c.cd=c.sw?.55:rnd(.9,1.5);tracer([g.position.x,1.3,g.position.z],[P.x+rnd(-1,1),1.2,P.z+rnd(-1,1)]);if(Math.random()<(c.sw?.5:.35))damage(c.sw?7:5,'Polis')}}
- for(let i=cruisers.length-1;i>=0;i--){const t=cruisers[i];if(t.userData.destroyed)continue;const dx=P.x-t.position.x,dz=P.z-t.position.z,d=Math.hypot(dx,dz)||1;
-  if(!stars||d>170){S.remove(t);cruisers.splice(i,1);continue}
-  const fl=Math.floor(clock.elapsedTime*6)%2;t.userData.lr.visible=!!fl;t.userData.lb.visible=!fl;t.rotation.y+=ad(t.rotation.y,Math.atan2(dx,dz))*Math.min(1,dt*2.5);
-  const sp=d>10?18:0,nx=t.position.x+Math.sin(t.rotation.y)*sp*dt,nz=t.position.z+Math.cos(t.rotation.y)*sp*dt;
-  if(!hit(nx,nz,2.2)&&Math.abs(nx)<LIM&&Math.abs(nz)<LIM){t.position.x=nx;t.position.z=nz}else t.rotation.y+=dt*2;
-  if(!inCar&&d<2.4&&sp)damage(35*dt,'Polis arabası');if(inCar&&d<3.5&&Math.abs(v)<30)v*=.97}
- if(mapOpen)drawBigMap()}
-function toggleMap(){if(!started)return;mapOpen=!mapOpen;$('bigmap').style.display=mapOpen?'flex':'none';if(mapOpen){document.exitPointerLock();Object.keys(K).forEach(k=>K[k]=false)}}
+function addWanted(n){if(!started||n<=0)return;stars=Math.min(5,stars+n);wantedT=0;updStars()}
+function toggleMap(){if(!started)return;mapOpen=!mapOpen;$('bigmap').style.display=mapOpen?'flex':'none';}
 function drawBigMap(){const cv=$('bm'),x=cv.getContext('2d'),W=cv.width,sc=W/(N*BL+60),X=q=>W/2+q*sc,dot=(px,pz,col,r)=>{x.fillStyle=col;x.beginPath();x.arc(X(px),X(pz),r,0,7);x.fill()};
- x.fillStyle='#4a6a4a';x.fillRect(0,0,W,W);x.strokeStyle='#2c2e34';x.lineWidth=10*sc;x.beginPath();for(let i=-N/2;i<=N/2;i++){x.moveTo(X(i*BL),0);x.lineTo(X(i*BL),W);x.moveTo(0,X(i*BL));x.lineTo(W,X(i*BL))}x.stroke();
- x.fillStyle='#6b7480';colliders.forEach(b=>x.fillRect(X(b.x-b.w),X(b.z-b.d),b.w*2*sc,b.d*2*sc));
- if(jobTarget)dot(jobTarget.x,jobTarget.z,'#ffd21f',7);for(const id in peersM)dot(peersM[id].g.position.x,peersM[id].g.position.z,'#4da3ff',5);
- const bl=Math.floor(clock.elapsedTime*4)%2;cops.forEach(c=>{if(c.alive)dot(c.g.position.x,c.g.position.z,bl?'#ff3b3b':'#3b6bff',4)});cruisers.forEach(t=>dot(t.position.x,t.position.z,bl?'#ff3b3b':'#3b6bff',6));
- const P=inCar?car.position:ch.position,r=inCar?ang:ch.rotation.y,px=X(P.x),py=X(P.z),c=Math.cos(r),sn=Math.sin(r);x.fillStyle='#fff';x.strokeStyle='#000';x.lineWidth=2;x.beginPath();x.moveTo(px+sn*14,py+c*14);x.lineTo(px-sn*8+c*9,py-c*8-sn*9);x.lineTo(px-sn*8-c*9,py-c*8+sn*9);x.closePath();x.fill();x.stroke()}
-{const _k=killNPC;killNPC=function(n){const w=n.alive;_k(n);if(w)addWanted(1)}}
-{const _e=explodeCar;explodeCar=function(t){const w=t&&!t.userData.destroyed&&t!==car;_e(t);if(w)addWanted(1)}}
-{const _r=doRobbery;doRobbery=function(){const b=jobTimer;_r();if(b<=0&&jobTimer>0)addWanted(2)}}
-{const _d=damage;damage=function(d,by){const h0=hp;_d(d,by);if(h0-d<=0)clearWanted()}}
+ x.fillStyle='#4a6a4a';x.fillRect(0,0,W,W);colliders.forEach(b=>x.fillRect(X(b.x-b.w),X(b.z-b.d),b.w*2*sc,b.d*2*sc));}
 
-// ---- çok oyunculu
 const RID=Math.random().toString(36).slice(2,10),peersM={};let room=null,lastSend=0;
 const evs=[];let evId=0;function pushEv(o){o.i=++evId;evs.push(o);if(evs.length>4)evs.shift();if(room)room.presence({ev:evs.slice()}).catch(()=>{})}
 const CT=['sedan','sport','luxury','suv','pickup'],okc=(c,d)=>/^#[0-9a-f]{6}$/i.test(c)?c:d;
-function lab(txt,h){const c=document.createElement('canvas');c.width=256;c.height=64;const x=c.getContext('2d');x.font='bold 28px sans-serif';x.textAlign='center';x.lineWidth=5;x.strokeStyle='#000';x.strokeText(txt,128,28);x.fillStyle='#fff';x.fillText(txt,128,28);x.fillStyle='#000';x.fillRect(48,40,160,10);x.fillStyle=h>35?'#4caf50':'#e53935';x.fillRect(49,41,158*Math.max(0,h)/100,8);const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(3.2,.8,1);return s}
-function bubble(obj,txt,col){const c=document.createElement('canvas');c.width=512;c.height=64;const x=c.getContext('2d');x.font='bold 26px sans-serif';x.textAlign='center';x.lineWidth=5;x.strokeStyle='#000';x.fillStyle=col;const t=txt.length>40?txt.slice(0,39)+'…':txt;x.strokeText(t,256,40);x.fillText(t,256,40);
- const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));s.scale.set(8,1,1);S.add(s);bub.push({s,obj,t:7})}
-function applyPeers(list){list.forEach(p=>{if(p.isMe)return;const d=p.presence,so=d&&san(d.o);if(!so)return;let e=peersM[p.peer];
- if(!e){const g=buildChar(so),cr=makeCar('#888888');S.add(g,cr);e=peersM[p.peer]={g,cr,key:'',lab:null,w:-1,ck:'',seen:Array.isArray(d.ev)?d.ev.reduce((a,x)=>Math.max(a,nn(x&&x.i)),0):0}}e.d=d;
- if(Array.isArray(d.ev))for(const x of d.ev){if(!x||!(nn(x.i)>e.seen))continue;e.seen=nn(x.i);
-  if(x.k=='chat'){const t=['me','do','say','sys'].includes(x.t)?x.t:'say';show(t,String(x.n||'?').slice(0,14),String(x.m||'').slice(0,120),e.g)}
-  else if(x.k=='phonemsg'){if(x.to===pname){show('sys','','📱 Gelen Telefon Mesajı ['+x.from+']: '+x.m); if($('phoneModal').style.display==='block'){$('phoneChatScreen').innerHTML+=`<div class="phoneMsgItem">${x.from}: ${x.m}</div>`;}}}
-  else if(x.k=='shot'){if(Array.isArray(x.a)&&Array.isArray(x.b)&&x.a.length==3&&x.b.length==3)tracer(x.a.map(nn),x.b.map(nn))}
-  else if(x.k=='punch'){e.g.userData.pt=.3;e.g.userData.ph=!e.g.userData.ph}else if(x.k=='smoke'){startSmoke(e.g)}else if(x.k=='hit'){if(started&&x.t===RID)damage(Math.min(60,nn(x.d)),String(x.n||'?').slice(0,14))}}})}
-function dropPeer(p){const e=peersM[p.peer];if(!e)return;S.remove(e.g,e.cr);if(e.lab)S.remove(e.lab);delete peersM[p.peer]}
-function damage(d,by){hp-=d;flash=.35;if(hp<=0){const m=by+', '+pname+' oyuncusunu vurdu';show('sys','',m);pushEv({k:'chat',t:'sys',n:by,m});hp=100;inCar=false;ch.visible=true;ch.position.set(rnd(4,16),0,rnd(4,16));v=0;hud()}}
-let wsTry=0,myId=null,wsLive=false,usingWS=false;
-function connectWS(){
- if(wsLive||!WS_URL||WS_URL.includes('BURAYA'))return;wsLive=true;usingWS=true;
- let ws;try{ws=new WebSocket(WS_URL)}catch(e){return}
- const shim={presence(p){if(ws.readyState===1)ws.send(JSON.stringify({t:'p',d:p}));return Promise.resolve()}};
- ws.onopen=()=>{room=shim;wsTry=0};
- ws.onmessage=ev=>{let m;try{m=JSON.parse(ev.data)}catch(e){return}
-  if(m.t==='hello'){myId=m.id;applyPeers((m.peers||[]).map(x=>({peer:x.peer,isMe:false,presence:x.presence})))}
-  else if(m.t==='u'){applyPeers((m.list||[]).filter(x=>x.peer!==myId).map(x=>({peer:x.peer,isMe:false,presence:x.presence})))}
-  else if(m.t==='l'){dropPeer({peer:m.peer})}};
- ws.onclose=()=>{wsLive=false;room=null;for(const id in peersM)dropPeer({peer:id});setTimeout(connectMP,Math.min(10000,2000*(++wsTry)))};
- ws.onerror=()=>{try{ws.close()}catch(e){}};
-}
-const P2P_ID='losbursa-letamrp-'+((new URLSearchParams(location.search).get('oda')||'ana').replace(/[^a-z0-9]/gi,'').toLowerCase().slice(0,20)||'ana'),P2P_KEYS=['o','id','w','n','x','z','r','ic','cx','cz','cr','ct','cc','hp','ev'];
-function connectMP(){if(wsLive)return;if(WS_URL&&!WS_URL.includes('BURAYA'))connectWS();else connectP2P()}
-function connectP2P(){
- if(wsLive||typeof Peer==='undefined')return;wsLive=true;
- let over=false,timer=null;
- const again=pr=>{if(over)return;over=true;clearInterval(timer);try{pr&&pr.destroy()}catch(e){}room=null;for(const id in peersM)dropPeer({peer:id});wsLive=false;setTimeout(connectMP,600+Math.random()*2200)};
- const hp0=new Peer(P2P_ID);let settled=false;
- hp0.on('open',()=>{settled=true;host(hp0)});
- hp0.on('disconnected',()=>{if(settled&&!over){try{hp0.reconnect()}catch(e){}}});
- hp0.on('error',err=>{if(settled)return;settled=true;try{hp0.destroy()}catch(e){}if(err.type==='unavailable-id')client();else again(null)});
- function host(pr){const me='host',pres=new Map([[me,{}]]),cl=new Map(),dirty=new Set();
-  room={presence(p){const c=pres.get(me);for(const k of Object.keys(p))if(P2P_KEYS.includes(k))c[k]=p[k];dirty.add(me);return Promise.resolve()}};
-  pr.on('connection',conn=>{const id=conn.peer;
-   conn.on('open',()=>{if(cl.size>=12){conn.close();return}cl.set(id,conn);pres.set(id,{});conn.send({t:'hello',id,peers:[...pres].filter(([k])=>k!==id).map(([k,v])=>({peer:k,presence:v}))})});
-   conn.on('data',m=>{const c=pres.get(id);if(!c||!m||m.t!=='p'||!m.d||typeof m.d!=='object')return;for(const k of Object.keys(m.d))if(P2P_KEYS.includes(k)&&JSON.stringify(m.d[k]).length<=1500)c[k]=m.d[k];dirty.add(id)});
-   const gone=()=>{if(!cl.delete(id))return;pres.delete(id);dirty.delete(id);dropPeer({peer:id});for(const o of cl.values())if(o.open)o.send({t:'l',peer:id})};
-   conn.on('close',gone);conn.on('error',gone)});
-  timer=setInterval(()=>{if(!dirty.size)return;const list=[...dirty].filter(k=>pres.has(k)).map(k=>({peer:k,presence:pres.get(k)}));dirty.clear();
-   for(const o of cl.values())if(o.open)o.send({t:'u',list});
-   applyPeers(list.filter(x=>x.peer!==me).map(x=>({peer:x.peer,isMe:false,presence:x.presence})))},50)}
- function client(){const cp=new Peer();let conn=null,my=null;const bad=()=>again(cp);
-  cp.on('open',id=>{my=id;conn=cp.connect(P2P_ID,{reliable:true});
-   conn.on('open',()=>{room={presence(p){if(conn.open)conn.send({t:'p',d:p});return Promise.resolve()}}});
-   conn.on('data',m=>{if(!m)return;
-    if(m.t==='hello')applyPeers((m.peers||[]).map(x=>({peer:x.peer,isMe:false,presence:x.presence})));
-    else if(m.t==='u')applyPeers((m.list||[]).filter(x=>x.peer!==my).map(x=>({peer:x.peer,isMe:false,presence:x.presence})));
-    else if(m.t==='l')dropPeer({peer:m.peer})});
-   conn.on('close',bad);conn.on('error',bad);
-   setTimeout(()=>{if(conn&&!conn.open)bad()},9000)});
-  cp.on('error',bad)}
-}
-document.getElementById('authSrv').value=(WS_URL&&!/localhost|127\.0\.0\.1/.test(WS_URL))?WS_URL:'';
-connectMP();
+function lab(txt,h){const c=document.createElement('canvas');c.width=256;c.height=64;const x=c.getContext('2d');x.font='bold 28px sans-serif';x.textAlign='center';x.fillStyle='#fff';x.fillText(txt,128,28);return new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),depthTest:false}));}
+function applyPeers(list){}
+function dropPeer(p){}
+function damage(d){hp-=d;if(hp<=0){hp=100;ch.position.set(0,0,0);}}
+let wsTry=0,wsLive=false;
+function connectMP(){}
+
 function mpUpdate(dt){
- if(started){if(hp<100)hp=Math.min(100,hp+3*dt);$('hp').style.width=hp+'%';lastSend+=dt;
-  if(room&&lastSend>.1){lastSend=0;const r=q=>Math.round(q*100)/100;room.presence({o:sel.slice(),id:RID,w:wp,n:pname,x:r(ch.position.x),z:r(ch.position.z),r:r(ch.rotation.y),ic:inCar?1:0,cx:r(car.position.x),cz:r(car.position.z),cr:r(car.rotation.y),ct:car.userData.carType||'sedan',cc:'#'+car.userData.body.material.color.getHexString(),hp:Math.round(hp),ev:evs.slice()}).catch(()=>{})}}
- const k=Math.min(1,dt*10);
- for(const id in peersM){const e=peersM[id],d=e.d;if(!d)continue;
-  const ct=CT.includes(d.ct)?d.ct:'sedan',cc=okc(d.cc,'#888888'),ck=ct+cc,first=e.ck==='';
-  if(e.ck!==ck){const o=e.cr;e.cr=makeCar(cc,ct);e.cr.position.copy(o.position);e.cr.rotation.y=o.rotation.y;S.remove(o);S.add(e.cr);e.ck=ck}
-  if(first){e.g.position.set(nn(d.x),0,nn(d.z));e.cr.position.set(nn(d.cx),0,nn(d.cz))}
-  e.g.position.x+=(nn(d.x)-e.g.position.x)*k;e.g.position.z+=(nn(d.z)-e.g.position.z)*k;e.g.rotation.y+=ad(e.g.rotation.y,nn(d.r))*k;e.g.visible=!d.ic;
-  animate(e.g,dt,Math.min(9,Math.hypot(e.g.position.x-(e.px??e.g.position.x),e.g.position.z-(e.pz??e.g.position.z))/Math.max(dt,.001)));e.px=e.g.position.x;e.pz=e.g.position.z;
-  const pw=Math.max(0,Math.min(5,nn(d.w)|0));if(e.w!==pw){e.w=pw;setWeapon(e.g,pw)}if(pw)armPose(e.g,pw);
-  e.cr.position.x+=(nn(d.cx)-e.cr.position.x)*k;e.cr.position.z+=(nn(d.cz)-e.cr.position.z)*k;e.cr.rotation.y+=ad(e.cr.rotation.y,nn(d.cr))*k;
-  const nm=String(d.n||'Oyuncu').slice(0,14),h=Math.round(nn(d.hp)),key=nm+h;
-  if(key!==e.key){if(e.lab)S.remove(e.lab);e.lab=lab(nm,h);S.add(e.lab);e.key=key}
-  e.lab.position.set(e.g.position.x,3.2,e.g.position.z)}
- $('on').textContent=room?'Çevrimiçi: '+(Object.keys(peersM).length+1):'Çok oyunculu bağlı değil – tek başınasın'}
+ if(started){if(hp<100)hp=Math.min(100,hp+3*dt);$('hp').style.width=hp+'%';}
+}
 const rx=$('rad').getContext('2d');
 function radar(){const t=inCar?car.position:ch.position,s=1.1,w=190,X=x=>w/2+(x-t.x)*s,Y=z=>w/2+(z-t.z)*s;
- rx.fillStyle='#52606d';rx.fillRect(0,0,w,w);rx.strokeStyle='#c9c9bd';rx.lineWidth=10*s;rx.beginPath();
- for(let i=-N/2;i<=N/2;i++){rx.moveTo(X(i*BL),0);rx.lineTo(X(i*BL),w);rx.moveTo(0,Y(i*BL));rx.lineTo(w,Y(i*BL))}rx.stroke();
- rx.fillStyle='#3c4753';colliders.forEach(c=>rx.fillRect(X(c.x-c.w),Y(c.z-c.d),c.w*2*s,c.d*2*s));
- rx.fillStyle='#ff3b3b';cops.forEach(c=>{if(c.alive){rx.beginPath();rx.arc(X(c.g.position.x),Y(c.g.position.z),4,0,7);rx.fill()}});rx.fillStyle='#4da3ff';for(const id in peersM){const e=peersM[id];rx.beginPath();rx.arc(X(e.g.position.x),Y(e.g.position.z),4,0,7);rx.fill()}
- const r=inCar?ang:ch.rotation.y,px=w/2,py=w/2,c=Math.cos(r),sn=Math.sin(r);rx.fillStyle='#fff';rx.beginPath();
- rx.moveTo(px+sn*9,py+c*9);rx.lineTo(px-sn*5+c*6,py-c*5-sn*6);rx.lineTo(px-sn*5-c*6,py-c*5+sn*6);rx.fill()}
+ rx.fillStyle='#52606d';rx.fillRect(0,0,w,w);rx.fillStyle='#3c4753';colliders.forEach(c=>rx.fillRect(X(c.x-c.w),Y(c.z-c.d),c.w*2*s,c.d*2*s));}
 
-function toggleAdmin(){if(currentUser!=='admin')return;adminOpen=!adminOpen;$('adminPanel').style.display=adminOpen?'block':'none';if(adminOpen){document.exitPointerLock();renderAdmin()}}
-function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderAdmin(){let users={};try{users=JSON.parse(localStorage.getItem('losBursaUsers')||'{}')}catch(e){};$('adminUsers').innerHTML='<h3>Kayıtlı hesaplar</h3><div class="adminGrid">'+Object.keys(users).map(n=>`<div class="adminCard"><b>${escapeHtml(n)}</b><p>Bakiye: ${money(users[n].data?.cash??25000)} ${n==='admin'?'· YÖNETİCİ':''}</p></div>`).join('')+'</div>'}
+function toggleAdmin(){if(currentUser!=='admin')return;adminOpen=!adminOpen;$('adminPanel').style.display=adminOpen?'block':'none';}
 $('adminClose').onclick=()=>{adminOpen=false;$('adminPanel').style.display='none'};
-$('adminGive').onclick=()=>{if(currentUser!=='admin')return;const target=$('adminTarget').value.trim(),amount=Math.floor(Number($('adminAmount').value));let users={};try{users=JSON.parse(localStorage.getItem('losBursaUsers')\vert{}\vert{}'{}')}catch(e){}if(!users[target]){$('adminMsg').textContent='Bu kullanıcı bulunamadı.';return}if(!Number.isFinite(amount)||amount<1||amount>100000000){$('adminMsg').textContent='Geçerli bir miktar gir.';return}users[target].data=users[target].data||{};users[target].data.cash=(users[target].data.cash??25000)+amount;localStorage.setItem('losBursaUsers',JSON.stringify(users));if(target===currentUser){savedData=users[target].data;cash=savedData.cash;updateRP()}$('adminMsg').textContent=target+' hesabına '+money(amount)+' verildi.';renderAdmin()};
-$('adminDelete').onclick=()=>{if(currentUser!=='admin')return;const target=$('adminDeleteName').value.trim();if(!target\vert{}\vert{}target==='admin'){$('adminMsg').textContent='Admin hesabı silinemez veya kullanıcı adı boş.';return}let users={};try{users=JSON.parse(localStorage.getItem('losBursaUsers')||'{}')}catch(e){}if(!users[target]){$('adminMsg').textContent='Hesap bulunamadı.';return}if(!confirm(target+' hesabı ve yerel kayıtları silinsin mi?'))return;delete users[target];localStorage.setItem('losBursaUsers',JSON.stringify(users));$('adminMsg').textContent=target+' hesabı silindi.';renderAdmin()};
 
 const skyU={top:{value:new THREE.Color()},hor:{value:new THREE.Color()},sunDir:{value:new THREE.Vector3(0,1,0)},sunCol:{value:new THREE.Color()},night:{value:0}};
-const skyM=new THREE.Mesh(new THREE.SphereGeometry(700,24,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,uniforms:skyU,vertexShader:'varying vec3 vP;void main(){vP=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec3 vP;uniform vec3 top,hor,sunCol,sunDir;uniform float night;void main(){float h=clamp(vP.y,0.,1.);vec3 c=mix(hor,top,pow(h,.55));float sd=max(dot(vP,sunDir),0.);c+=sunCol*(pow(sd,600.)*2.+pow(sd,12.)*.35);vec2 q=floor(vP.xz/(vP.y+.3)*90.);c+=vec3(step(.9965,fract(sin(dot(q,vec2(12.9898,78.233)))*43758.5453))*night*step(.1,vP.y));gl_FragColor=vec4(c,1.);}'}));skyM.frustumCulled=false;S.add(skyM);
-const SKY_K=[{t:0,top:0x050a1c,hor:0x141b33,sun:0x223355,n:1},{t:5,top:0x15234a,hor:0xe08a5a,sun:0xff9a5a,n:.6},{t:7,top:0x4a86d8,hor:0xffc79a,sun:0xffd9a8,n:0},{t:12,top:0x2f7be0,hor:0xbfdcff,sun:0xfff4dc,n:0},{t:17,top:0x4a6fb8,hor:0xffb070,sun:0xffa860,n:0},{t:19,top:0x2a2a66,hor:0xff6f61,sun:0xff7a50,n:.35},{t:21,top:0x070d24,hor:0x1a2140,sun:0x223355,n:1},{t:24,top:0x050a1c,hor:0x141b33,sun:0x223355,n:1}];
-const _c=new THREE.Color(),lc=(t,A,B,f)=>t.setHex(A).lerp(_c.setHex(B),f);let envB=-1,envRT=null;const pmg=new THREE.PMREMGenerator(R);
+const skyM=new THREE.Mesh(new THREE.SphereGeometry(700,24,16),new THREE.ShaderMaterial({side:THREE.BackSide,depthWrite:false,fog:false,uniforms:skyU,vertexShader:'varying vec3 vP;void main(){vP=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec3 vP;uniform vec3 top,hor,sunCol,sunDir;uniform float night;void main(){float h=clamp(vP.y,0.,1.);vec3 c=mix(hor,top,pow(h,.55));gl_FragColor=vec4(c,1.);}'}));skyM.frustumCulled=false;S.add(skyM);
+const SKY_K=[{t:0,top:0x050a1c,hor:0x141b33,sun:0x223355,n:1},{t:12,top:0x2f7be0,hor:0xbfdcff,sun:0xfff4dc,n:0},{t:24,top:0x050a1c,hor:0x141b33,sun:0x223355,n:1}];
 function gameMin(){return(clock.elapsedTime*2+1020)%1440}
-function updEnv(b){if(b==envB)return;envB=b;const c=document.createElement('canvas');c.width=256;c.height=128;const x=c.getContext('2d'),g=x.createLinearGradient(0,0,0,128);g.addColorStop(0,'#'+skyU.top.value.getHexString());g.addColorStop(.5,'#'+skyU.hor.value.getHexString());g.addColorStop(1,'#222222');x.fillStyle=g;x.fillRect(0,0,256,128);const t=new THREE.CanvasTexture(c);t.mapping=THREE.EquirectangularReflectionMapping;const rt=pmg.fromEquirectangular(t);if(envRT)envRT.dispose();envRT=rt;S.environment=rt.texture;t.dispose()}
-function updSky(tgt){const h=gameMin()/60;let a=SKY_K[0],b=SKY_K[1];for(let i=0;i<SKY_K.length-1;i++)if(h>=SKY_K[i].t&&h<=SKY_K[i+1].t){a=SKY_K[i];b=SKY_K[i+1]}
- const f=(h-a.t)/(b.t-a.t),nf=a.n+(b.n-a.n)*f;lc(skyU.top.value,a.top,b.top,f);lc(skyU.hor.value,a.hor,b.hor,f);lc(skyU.sunCol.value,a.sun,b.sun,f);skyU.night.value=nf;
- const ang=(h-6)/24*Math.PI*2,v=new THREE.Vector3(Math.cos(ang)*.85,Math.sin(ang),.4).normalize();skyU.sunDir.value.copy(v);
- const up=v.y>0,L=up?v.clone():new THREE.Vector3(-v.x,-v.y,v.z);L.y=Math.max(L.y,.2);L.normalize();
- sun.position.set(tgt.x+L.x*120,L.y*120,tgt.z+L.z*120);sun.color.copy(up?skyU.sunCol.value:_c.setHex(0x6a7fb8));sun.intensity=up?Math.min(1.4,v.y*3+.15):.35;
- hemi.color.copy(skyU.hor.value);hemi.groundColor.setHex(0x303848);hemi.intensity=.15+.3*(1-nf);S.fog.color.copy(skyU.hor.value);S.background=S.fog.color;
- bm.forEach(m=>m.emissiveIntensity=nf*1.2);lampHead.material.emissiveIntensity=nf*3;skyM.position.copy(C.position);updEnv(Math.floor(gameMin()/45))}
+function updSky(tgt){const h=gameMin()/60;let a=SKY_K[0],b=SKY_K[1];
+ skyU.top.value.setHex(a.top);skyU.hor.value.setHex(a.hor);skyU.sunCol.value.setHex(a.sun);skyU.night.value=a.n;
+ S.fog.color.copy(skyU.hor.value);S.background=S.fog.color;
+ skyM.position.copy(C.position);
+}
 const clock=new THREE.Clock();
 function tick(){requestAnimationFrame(tick);const dt=Math.min(clock.getDelta(),.05);
  traffic.forEach(t=>{if(t.userData.destroyed)return;const u=t.userData,s=12*dt*u.dir;if(u.hz)t.position.x+=s;else t.position.z+=s;
   if(Math.abs(t.position.x)>H+5||Math.abs(t.position.z)>H+5){if(u.hz)t.position.x*=-1;else t.position.z*=-1}});
  if(started){
-  updateNPCs(dt);updWanted(dt);updInt(dt);
-  if(jobTarget){const pp=inCar?car.position:ch.position; if(jobTimer>0){jobTimer-=dt;if(jobTimer<=0&&activeJob&&activeJob.type==='robbery'){const reward=Math.floor(rnd(1200,2001));cash+=reward;activeJob=null;jobTarget=null;show('sys','','Soygun tamamlandı: '+money(reward)+' kazandın.');updateRP()}} else if(activeJob&&activeJob.type!=='robbery'&&Math.hypot(pp.x-jobTarget.x,pp.z-jobTarget.z)<4){const reward=activeJob.type==='smuggle'?Math.floor(rnd(1800,2601)):Math.floor(rnd(650,1101));cash+=reward;activeJob=null;jobTarget=null;show('sys','','Teslimat tamamlandı: '+money(reward)+' kazandın.');updateRP()}}
-  if(jobTarget&&jobTimer<=0){const marker=new THREE.Vector3(jobTarget.x,0.25,jobTarget.z);if(!window._jobMarker){window._jobMarker=new THREE.Mesh(new THREE.CylinderGeometry(.8,.8,.12,24),new THREE.MeshBasicMaterial({color:0xffd21f}));S.add(window._jobMarker)}window._jobMarker.visible=true;window._jobMarker.position.copy(marker)}else if(window._jobMarker)window._jobMarker.visible=false;
-  if(jobTimer>0&&activeJob&&activeJob.type==='robbery'&&jobTarget&&Math.hypot(ch.position.x-jobTarget.x,ch.position.z-jobTarget.z)>6){jobTimer=0;show('sys','','Soygun yarıda kaldı; hedef bölgeden uzaklaştın.')}
-
+  updateNPCs(dt);updInt(dt);
+  if(jobTarget){const pp=inCar?car.position:ch.position; if(jobTimer>0){jobTimer-=dt;if(jobTimer<=0&&activeJob&&activeJob.type==='robbery'){const reward=Math.floor(rnd(1200,2001));cash+=reward;activeJob=null;jobTarget=null;updateRP()}} else if(activeJob&&activeJob.type!=='robbery'&&Math.hypot(pp.x-jobTarget.x,pp.z-jobTarget.z)<4){const reward=650;cash+=reward;activeJob=null;jobTarget=null;updateRP()}}
   if(inCar){
    const th=(K.KeyW?1:0)-(K.KeyS?1:0),st=(K.KeyA?1:0)-(K.KeyD?1:0);
    if(th!==0 && carFuel>0) carFuel = Math.max(0, carFuel - dt*0.3);
@@ -891,9 +664,8 @@ function tick(){requestAnimationFrame(tick);const dt=Math.min(clock.getDelta(),.
    ang+=st*Math.min(1,Math.abs(v)/8)*(K.Space?2.4:1.4)*dt*Math.sign(v||1);
    const fwd=new THREE.Vector3(Math.sin(ang),0,Math.cos(ang));carVel.lerp(fwd.multiplyScalar(v),Math.min(1,(K.Space?1.2:7)*dt));
    const nx=car.position.x+carVel.x*dt,nz=car.position.z+carVel.z*dt;
-   if(hit(nx,nz,1.6)){if(Math.abs(v)>14){hp-=Math.abs(v)*.5;if(hp<=0){hp=100;car.position.set(0,0,12);ang=Math.PI/2}}v*=-.3;carVel.multiplyScalar(-.3)}else{car.position.x=nx;car.position.z=nz}
-   car.position.x=Math.max(-LIM,Math.min(LIM,car.position.x));car.position.z=Math.max(-LIM,Math.min(LIM,car.position.z));
-   car.rotation.y=ang;car.userData.body.rotation.z=-st*Math.min(1,Math.abs(v)/40)*.06;$('spd').textContent=Math.round(Math.abs(v)*3.6);ch.position.copy(car.position);
+   if(hit(nx,nz,1.6)){v*=-.3;carVel.multiplyScalar(-.3)}else{car.position.x=nx;car.position.z=nz}
+   car.rotation.y=ang;$('spd').textContent=Math.round(Math.abs(v)*3.6);ch.position.copy(car.position);
    updateRP();
   }else{const f=(K.KeyW?1:0)-(K.KeyS?1:0),s=(K.KeyD?1:0)-(K.KeyA?1:0),sp=K.ShiftLeft?9:4.5,
     d=new THREE.Vector3(-Math.sin(yaw)*f+Math.cos(yaw)*s,0,-Math.cos(yaw)*f-Math.sin(yaw)*s);
@@ -901,19 +673,22 @@ function tick(){requestAnimationFrame(tick);const dt=Math.min(clock.getDelta(),.
     if(!hit(nx,ch.position.z,.4))ch.position.x=nx;if(!hit(ch.position.x,nz,.4))ch.position.z=nz;
     ch.rotation.y+=ad(ch.rotation.y,Math.atan2(d.x,d.z))*Math.min(1,dt*12);mvS=sp}
    else mvS=0;if(jumpV!==0||ch.position.y>0){jumpV-=18*dt;ch.position.y=Math.max(0,ch.position.y+jumpV*dt);if(ch.position.y===0)jumpV=0}ch.userData.air=ch.position.y>.03?1:0;animate(ch,dt,mvS);if(wp){ch.rotation.y+=ad(ch.rotation.y,yaw+Math.PI)*Math.min(1,dt*14);armPose(ch,wp)}
-   $('spd').textContent=ch.position.distanceTo(car.position)<5?'E':'';if(shopOpen||garageOpen||phoneActiveCall)K.KeyW=K.KeyA=K.KeyS=K.KeyD=false}
+   $('spd').textContent=ch.position.distanceTo(car.position)<5?'E':'';}
   const tgt=inCar?car.position:ch.position,dist=inCar?9:(aimMode?3.1:5.5),cy=inCar?ang+Math.PI:yaw,cp=inCar?.28:pitch;
-  C.position.lerp(new THREE.Vector3(tgt.x+Math.sin(cy)*dist*Math.cos(cp),tgt.y+2+Math.sin(cp)*dist,tgt.z+Math.cos(cy)*dist*Math.cos(cp)),inCar?.12:.3);C.lookAt(tgt.x,tgt.y+1.4,tgt.z);
-  updSky(tgt);sun.target.position.copy(tgt);radar();
-  const m=Math.floor(gameMin());$('clk').textContent=String(Math.floor(m/60)%24).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}
- else{updSky(PV);const fz=cur>=13&&cur<OP.length;if(fz)pvc.rotation.y+=ad(pvc.rotation.y,.25)*Math.min(1,dt*6);else pvc.rotation.y+=dt*.6;animate(pvc,dt,0);C.position.set(PV.x,fz?1.75:1.4,PV.z+(fz?1.5:4.2));C.lookAt(PV.x-(fz?.3:1.4),fz?1.72:1.1,PV.z);sun.position.set(PV.x+6,12,PV.z+8);sun.target.position.copy(PV)}
- for(let i=tr.length-1;i>=0;i--){tr[i].t-=dt;if(tr[i].t<=0){S.remove(tr[i].l);tr[i].l.geometry.dispose();tr.splice(i,1)}}
- for(let i=bub.length-1;i>=0;i--){const q=bub[i];q.t-=dt;q.s.position.set(q.obj.position.x,4.2,q.obj.position.z);if(q.t<=0){S.remove(q.s);bub.splice(i,1)}}
- updPuffs(dt);for(let i=explosions.length-1;i>=0;i--){const x=explosions[i];x.t+=dt;const k=x.t/x.duration;x.core.scale.setScalar(1+k*4);x.core.material.opacity=Math.max(0,.9-k);x.smoke.position.y+=dt*1.5;x.smoke.scale.setScalar(1+k*3);x.smoke.material.opacity=Math.max(0,.8-k*.7);
-  if(x.t>=x.duration){S.remove(x.core,x.smoke);explosions.splice(i,1);const tg=x.target;setTimeout(()=>{tg.userData.destroyed=false;tg.visible=true},8000)}}
- if(started){if(reloadT>0){reloadT-=dt;if(reloadT<=0){ammo=WP[wp].mag;hud()}}if(firing&&wp>=2&&wp<=5)shoot();flash=Math.max(0,flash-dt);$('fl').style.opacity=Math.min(1,flash*2.5)}
- mpUpdate(dt);R.render(S,C)}
-$('rpClose').addEventListener('click',closeRP);
-document.addEventListener('keydown',e=>{if(shopOpen&&e.code==='Escape'){closeRP();e.preventDefault()}});
-tick();
-</script></body></html>
+  C.position.lerp(new THREE.Vector3(tgt.x+Math.sin(cy)*dist*Math.cos(cp),tgt.y+2+Math.sin(cp)*dist,tgt.z+Math.cos(cy)*dist*Math.cos(cp)),inCar?.12:.3);C.lookAt(tgt.x,tgt.y+1.4Kullanıcının gönderdiği HTML dosyasındaki (`index (8).html`) kaydolma ve giriş sistemini inceledim. Kodda yer alan `doLogin()` fonksiyonunu ve `localStorage` yapısını kontrol ettiğimizde, kaydolma/giriş mekanizmasının çalışmamasının veya hata vermesinin arkasındaki temel sebepleri ve çözüm yollarını belirledim.
+
+### Sorunun Kaynağı Nedir?
+1. **`localStorage` Veri Yapısı Uyuşmazlığı:** Tarayıcının `localStorage` alanında daha önceden bozuk, eksik veya farklı bir formatta (`losBursaUsers` anahtarıyla) veri kalmış olabilir. Bu durum `JSON.parse` sırasında hataya yol açarak giriş işlemini kırabilir.
+2. **Kullanıcı Bilgilerinin Güncellenmesi veya Şifre Doğrulama Çakışması:** Aynı kullanıcı adıyla daha önce farklı bir şifre kaydedildiyse veya `savedData` nesnesi bozulduysa sistem hata mesajı döndürebilir.
+3. **Alan Adı (Domain) veya Tarayıcı Gizli Mod Kısıtlamaları:** Tarayıcılar (özellikle gizli sekme veya sıkı gizlilik ayarlarında) `localStorage` kullanımını engelleyebilir veya kısıtlayabilir.
+
+---
+
+### Çözüm İçin Ne Yapmalısın?
+
+Tarayıcının konsolunda (`F12` -> *Console*) bir hata alıyorsan veya giriş yaparken sayfa tepki vermiyorsa, aşağıdaki adımları uygulayarak sorunu düzeltebilirsin:
+
+#### 1. Tarayıcı Yerel Verilerini (localStorage) Sıfırlama
+Daha önceki bozuk kayıtları temizlemek için tarayıcının konsoluna şu komutu yazıp **Enter** tuşuna basarak verileri sıfırlayabilirsin:
+```javascript
+localStorage.removeItem('losBursaUsers');
